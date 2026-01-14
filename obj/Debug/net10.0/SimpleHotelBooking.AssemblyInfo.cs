@@ -10,10 +10,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.AspNetCore.Identity.UI.UIFrameworkAttribute("Bootstrap5")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("SimpleHotelBooking")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+58ed828691a24052a8c62ac0c017b9eaddb656e1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3a075af8b54138f4348e6b846a80f33241f77bd3")]
 [assembly: System.Reflection.AssemblyProductAttribute("SimpleHotelBooking")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SimpleHotelBooking")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

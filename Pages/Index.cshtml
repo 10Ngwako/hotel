@@ -1,10 +1,74 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-5">
+    <!-- Hero Section -->
+    <div class="jumbotron text-center p-5 bg-light rounded shadow-sm">
+        <h1 class="display-4">Welcome to Hotel Booking System</h1>
+        <p class="lead">Book hotels easily and manage your bookings.</p>
+        <div class="mt-4">
+            <a class="btn btn-primary btn-lg mx-2" asp-page="/Hotels/Index">View Hotels</a>
+            <a class="btn btn-success btn-lg mx-2" asp-page="/Bookings/Index">View Bookings</a>
+        </div>
+    </div>
+
+    <!-- Featured Hotels Section -->
+    <h2 class="mt-5 mb-3 text-center">Featured Hotels</h2>
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <img src="/images/hotel1.jpg" class="card-img-top" alt="Hotel 1">
+                <div class="card-body">
+                    <h5 class="card-title">Ocean View Resort</h5>
+                    <p class="card-text">Enjoy luxury by the beach with stunning views.</p>
+                    <a class="btn btn-primary" asp-page="/Hotels/Index">Book Now</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <img src="/images/hotel2.jpg" class="card-img-top" alt="Hotel 2">
+                <div class="card-body">
+                    <h5 class="card-title">Mountain Escape</h5>
+                    <p class="card-text">Relax in the serene mountains and enjoy nature.</p>
+                    <a class="btn btn-primary" asp-page="/Hotels/Index">Book Now</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <img src="/images/hotel3.jpg" class="card-img-top" alt="Hotel 3">
+                <div class="card-body">
+                    <h5 class="card-title">City Central Hotel</h5>
+                    <p class="card-text">Stay in the heart of the city with all conveniences.</p>
+                    <a class="btn btn-primary" asp-page="/Hotels/Index">Book Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How It Works Section -->
+    <h2 class="mt-5 mb-3 text-center">How It Works</h2>
+    <div class="row text-center">
+        <div class="col-md-4 mb-3">
+            <i class="bi bi-search display-4 text-primary"></i>
+            <h5 class="mt-2">Find Hotels</h5>
+            <p>Search hotels by location, price, and amenities easily.</p>
+        </div>
+        <div class="col-md-4 mb-3">
+            <i class="bi bi-calendar-check display-4 text-success"></i>
+            <h5 class="mt-2">Book a Room</h5>
+            <p>Reserve your room in a few clicks with secure booking.</p>
+        </div>
+        <div class="col-md-4 mb-3">
+            <i class="bi bi-check-circle display-4 text-warning"></i>
+            <h5 class="mt-2">Enjoy Your Stay</h5>
+            <p>Relax knowing your booking is confirmed and hassle-free.</p>
+        </div>
+    </div>
 </div>
