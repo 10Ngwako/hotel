@@ -1,0 +1,35 @@
+@page
+@model SimpleHotelBooking.Pages.Hotels.IndexModel
+@{
+    ViewData["Title"] = "Hotels";
+}
+
+<h1>Hotels</h1>
+<a class="btn btn-primary" asp-page="Create">Add New Hotel</a>
+
+<table class="table mt-3">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Total Rooms</th>
+            <th>Price/Night</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var hotel in Model.Hotels)
+        {
+            <tr>
+                <td>@hotel.Name</td>
+                <td>@hotel.Location</td>
+                <td>@hotel.TotalRooms</td>
+                <td>@hotel.PricePerNight.ToString("C")</td>
+                <td>
+                    <a class="btn btn-sm btn-warning" asp-page="Edit" asp-route-id="@hotel.Id">Edit</a>
+                    <a class="btn btn-sm btn-danger" asp-page="Delete" asp-route-id="@hotel.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
