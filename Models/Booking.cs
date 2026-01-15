@@ -1,26 +1,48 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace SimpleHotelBooking.Models
 {
     public class Booking
     {
         public int Id { get; set; }
+        
+        [Required]
         public int HotelId { get; set; }
+        
+        [Required]
         public string HotelName { get; set; } = string.Empty;
+        
+        [Required]
+        [EmailAddress]
         public string UserEmail { get; set; } = string.Empty;
-        public System.DateTime CheckInDate { get; set; }
-        public System.DateTime CheckOutDate { get; set; }
-        public int NumberOfGuests { get; set; }
+        
+        [Required]
+        public DateTime CheckInDate { get; set; }
+        
+        [Required]
+        public DateTime CheckOutDate { get; set; }
+        
+        [Range(1, 10)]
+        public int NumberOfGuests { get; set; } = 1;
+        
+        [Range(1, 10000)]
         public decimal TotalPrice { get; set; }
+        
         public string Status { get; set; } = "Confirmed";
-        public System.DateTime BookingDate { get; set; } = System.DateTime.Now;
+        public DateTime BookingDate { get; set; } = DateTime.Now;
+        
         public string SpecialRequests { get; set; } = string.Empty;
         
-        // Guest information - updated names to match your code
-        public string CustomerName { get; set; } = string.Empty;  // Was GuestName
-        public string CustomerPhone { get; set; } = string.Empty; // Was GuestPhone
-        public string CustomerEmail { get; set; } = string.Empty; // Was GuestEmail
+        // Guest information
+        [Required]
+        public string CustomerName { get; set; } = string.Empty;
         
-        // Added to match your existing code
-        public int RoomsBooked { get; set; } = 1;
-        public string Hotel { get; set; } = string.Empty; // Hotel name or details
+        public string CustomerPhone { get; set; } = string.Empty;
+        
+        [EmailAddress]
+        public string CustomerEmail { get; set; } = string.Empty;
+        
+        // Navigation property
+        public Hotel? Hotel { get; set; }
     }
 }

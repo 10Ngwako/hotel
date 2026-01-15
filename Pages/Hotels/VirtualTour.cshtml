@@ -1,0 +1,348 @@
+@page "{id:int}"
+@model SimpleHotelBooking.Pages.Hotels.VirtualTourModel
+@{
+    ViewData["Title"] = $"Virtual Tour - {Model.Hotel?.Name}";
+}
+
+<div class="container-fluid p-0">
+    <!-- Full-screen Virtual Tour -->
+    <div class="row g-0">
+        <!-- Main Tour Area -->
+        <div class="col-lg-9">
+            <div class="position-relative" style="height: 100vh;">
+                <!-- 360° Image Viewer -->
+                <div id="tour-viewer" class="h-100">
+                    <div id="image-carousel" class="carousel slide h-100" data-bs-ride="carousel">
+                        <div class="carousel-inner h-100">
+                            @for (int i = 0; i < Model.TourImages.Count; i++)
+                            {
+                                <div class="carousel-item h-100 @(i == 0 ? "active" : "")">
+                                    <div class="d-flex justify-content-center align-items-center h-100 bg-dark">
+                                        <img src="@Model.TourImages[i]" 
+                                             class="d-block w-100 h-100" 
+                                             style="object-fit: cover;"
+                                             alt="Hotel Tour Image @(i+1)">
+                                        <div class="position-absolute bottom-0 start-0 end-0 p-4 text-white text-center bg-dark bg-opacity-50">
+                                            <h5>@GetRoomName(i)</h5>
+                                            <p class="mb-0">Use ← → arrows to navigate the tour</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#image-carousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#image-carousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Tour Controls Overlay -->
+                <div class="position-absolute top-0 end-0 p-3">
+                    <button id="fullscreen-btn" class="btn btn-light btn-sm">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                    <button id="exit-tour" class="btn btn-light btn-sm ms-2" onclick="window.history.back()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <!-- Voice Controls Overlay -->
+                <div class="position-absolute bottom-0 start-0 end-0 p-3">
+                    <div class="card bg-dark bg-opacity-75 text-white">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h6 class="mb-1">
+                                        <i class="fas fa-volume-up"></i> Voice Guide
+                                    </h6>
+                                    <div class="progress" style="height: 4px;">
+                                        <div id="voice-progress" class="progress-bar" role="progressbar" style="width: 0%"></div>
+                                    </div>
+                                    <small id="voice-status">Ready to play tour guide</small>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="btn-group" role="group">
+                                        <button id="play-voice" class="btn btn-success btn-sm">
+                                            <i class="fas fa-play"></i>
+                                        </button>
+                                        <button id="pause-voice" class="btn btn-warning btn-sm" disabled>
+                                            <i class="fas fa-pause"></i>
+                                        </button>
+                                        <button id="stop-voice" class="btn btn-danger btn-sm" disabled>
+                                            <i class="fas fa-stop"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tour Information Sidebar -->
+        <div class="col-lg-3 bg-light" style="height: 100vh; overflow-y: auto;">
+            <div class="p-4">
+                <h4 class="mb-3">@Model.Hotel?.Name</h4>
+                <p class="text-muted">
+                    <i class="fas fa-map-marker-alt"></i> @Model.Hotel?.Location
+                </p>
+                
+                <!-- Tour Points -->
+                <div class="mb-4">
+                    <h6><i class="fas fa-map-signs"></i> Tour Points</h6>
+                    <div class="list-group">
+                        <a href="#" class="list-group-item list-group-item-action active" data-bs-target="#image-carousel" data-bs-slide-to="0">
+                            <i class="fas fa-door-open"></i> Lobby Entrance
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action" data-bs-target="#image-carousel" data-bs-slide-to="1">
+                            <i class="fas fa-bed"></i> Deluxe Room
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action" data-bs-target="#image-carousel" data-bs-slide-to="2">
+                            <i class="fas fa-utensils"></i> Restaurant
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action" data-bs-target="#image-carousel" data-bs-slide-to="3">
+                            <i class="fas fa-swimming-pool"></i> Swimming Pool
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Tour Description -->
+                <div class="mb-4">
+                    <h6><i class="fas fa-info-circle"></i> About This Tour</h6>
+                    <p id="tour-description">
+                        Experience @Model.Hotel?.Name through our immersive virtual tour. 
+                        Explore the luxurious lobby, spacious rooms, gourmet restaurant, 
+                        and relaxing pool area. Each point of interest includes detailed 
+                        audio descriptions.
+                    </p>
+                </div>
+                
+                <!-- Hotel Features -->
+                <div class="mb-4">
+                    <h6><i class="fas fa-star"></i> Hotel Features</h6>
+                    <div class="row">
+                        @foreach (var amenity in (Model.Hotel?.Amenities?.Split(",") ?? new string[0]).Take(6))
+                        {
+                            <div class="col-6 mb-2">
+                                <i class="fas fa-check text-success"></i>
+                                <small>@amenity</small>
+                            </div>
+                        }
+                    </div>
+                </div>
+                
+                <!-- Booking Action -->
+                <div class="card bg-primary text-white">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Ready to Book?</h5>
+                        <p class="card-text">Starting at $@Model.Hotel?.PricePerNight.ToString("F2")/night</p>
+                        <a asp-page="/Bookings/Create" asp-route-hotelId="@Model.Hotel?.Id" 
+                           class="btn btn-light btn-lg w-100">
+                            <i class="fas fa-calendar-check"></i> Book Now
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Tour Tips -->
+                <div class="mt-4">
+                    <h6><i class="fas fa-lightbulb"></i> Tour Tips</h6>
+                    <ul class="small text-muted">
+                        <li>Use arrow keys to navigate between rooms</li>
+                        <li>Click play button for audio guide</li>
+                        <li>Click on tour points for quick navigation</li>
+                        <li>Press F for fullscreen experience</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        // Voice Guide System
+        const tourDescriptions = [
+            "Welcome to the luxurious lobby of @Model.Hotel?.Name. Notice the elegant marble flooring and grand chandelier. The reception area features 24/7 concierge service to assist with all your needs during your stay.",
+            "This is our deluxe guest room, featuring a king-size bed with premium linens, a work desk, and a stunning city view. The room includes high-speed WiFi, a flat-screen TV, and a complimentary minibar.",
+            "Our gourmet restaurant offers international cuisine prepared by award-winning chefs. Enjoy breakfast, lunch, and dinner in this elegant setting with panoramic views of @Model.Hotel?.Location.",
+            "Relax by our temperature-controlled swimming pool, surrounded by lush gardens. The pool area includes comfortable loungers, poolside service, and a Jacuzzi for ultimate relaxation."
+        ];
+        
+        let currentDescriptionIndex = 0;
+        let speech = null;
+        let isPlaying = false;
+        
+        // Initialize speech synthesis
+        function initSpeech() {
+            if ('speechSynthesis' in window) {
+                updateVoiceDescription();
+            } else {
+                document.getElementById('voice-status').textContent = "Voice guide not supported in this browser";
+                document.getElementById('play-voice').disabled = true;
+            }
+        }
+        
+        // Update voice description based on current slide
+        function updateVoiceDescription() {
+            const carousel = document.querySelector('#image-carousel');
+            currentDescriptionIndex = Array.from(carousel.querySelectorAll('.carousel-item')).findIndex(item => item.classList.contains('active'));
+            
+            if (speech && isPlaying) {
+                speechSynthesis.cancel();
+                playVoice();
+            }
+        }
+        
+        // Play voice description
+        function playVoice() {
+            if (!speechSynthesis.speaking) {
+                speech = new SpeechSynthesisUtterance(tourDescriptions[currentDescriptionIndex]);
+                speech.rate = 1;
+                speech.pitch = 1;
+                speech.volume = 1;
+                
+                // Set voice if available
+                const voices = speechSynthesis.getVoices();
+                if (voices.length > 0) {
+                    speech.voice = voices.find(v => v.lang.startsWith('en')) || voices[0];
+                }
+                
+                speech.onstart = function() {
+                    isPlaying = true;
+                    document.getElementById('play-voice').disabled = true;
+                    document.getElementById('pause-voice').disabled = false;
+                    document.getElementById('stop-voice').disabled = false;
+                    document.getElementById('voice-status').textContent = "Playing tour guide...";
+                    
+                    // Animate progress bar
+                    const duration = tourDescriptions[currentDescriptionIndex].length / 15; // Approx seconds
+                    animateProgressBar(duration);
+                };
+                
+                speech.onend = function() {
+                    isPlaying = false;
+                    document.getElementById('play-voice').disabled = false;
+                    document.getElementById('pause-voice').disabled = true;
+                    document.getElementById('stop-voice').disabled = true;
+                    document.getElementById('voice-status').textContent = "Tour guide finished";
+                    document.getElementById('voice-progress').style.width = "100%";
+                };
+                
+                speechSynthesis.speak(speech);
+            }
+        }
+        
+        // Animate progress bar
+        function animateProgressBar(duration) {
+            const progressBar = document.getElementById('voice-progress');
+            let width = 0;
+            const interval = setInterval(() => {
+                if (width >= 100 || !isPlaying) {
+                    clearInterval(interval);
+                    return;
+                }
+                width += 100 / (duration * 10);
+                progressBar.style.width = width + '%';
+            }, 100);
+        }
+        
+        // Event Listeners
+        document.getElementById('play-voice').addEventListener('click', playVoice);
+        
+        document.getElementById('pause-voice').addEventListener('click', function() {
+            if (isPlaying) {
+                speechSynthesis.pause();
+                isPlaying = false;
+                this.disabled = true;
+                document.getElementById('play-voice').disabled = false;
+                document.getElementById('voice-status').textContent = "Paused";
+            }
+        });
+        
+        document.getElementById('stop-voice').addEventListener('click', function() {
+            speechSynthesis.cancel();
+            isPlaying = false;
+            document.getElementById('play-voice').disabled = false;
+            document.getElementById('pause-voice').disabled = true;
+            this.disabled = true;
+            document.getElementById('voice-status').textContent = "Stopped";
+            document.getElementById('voice-progress').style.width = "0%";
+        });
+        
+        // Fullscreen functionality
+        document.getElementById('fullscreen-btn').addEventListener('click', function() {
+            const tourViewer = document.getElementById('tour-viewer');
+            if (!document.fullscreenElement) {
+                tourViewer.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+                this.innerHTML = '<i class="fas fa-compress"></i>';
+            } else {
+                document.exitFullscreen();
+                this.innerHTML = '<i class="fas fa-expand"></i>';
+            }
+        });
+        
+        // Update voice when carousel slides
+        document.querySelector('#image-carousel').addEventListener('slid.bs.carousel', updateVoiceDescription);
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            const carousel = new bootstrap.Carousel(document.getElementById('image-carousel'));
+            
+            switch(e.key) {
+                case 'ArrowLeft':
+                    carousel.prev();
+                    break;
+                case 'ArrowRight':
+                    carousel.next();
+                    break;
+                case ' ':
+                    e.preventDefault();
+                    if (isPlaying) {
+                        document.getElementById('pause-voice').click();
+                    } else {
+                        document.getElementById('play-voice').click();
+                    }
+                    break;
+                case 'f':
+                case 'F':
+                    document.getElementById('fullscreen-btn').click();
+                    break;
+            }
+        });
+        
+        // Auto-play voice when slide changes (optional)
+        // document.querySelector('#image-carousel').addEventListener('slid.bs.carousel', function() {
+        //     setTimeout(playVoice, 500);
+        // });
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initSpeech);
+        
+        // Auto-play first description (optional)
+        // setTimeout(playVoice, 1000);
+    </script>
+}
+
+@functions {
+    private string GetRoomName(int index)
+    {
+        return index switch
+        {
+            0 => "Lobby & Reception",
+            1 => "Deluxe Guest Room",
+            2 => "Gourmet Restaurant",
+            3 => "Swimming Pool Area",
+            _ => "Hotel View"
+        };
+    }
+}

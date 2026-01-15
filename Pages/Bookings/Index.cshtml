@@ -28,7 +28,7 @@
                 <td>@booking.Hotel</td>
                 <td>@booking.CheckInDate.ToShortDateString()</td>
                 <td>@booking.CheckOutDate.ToShortDateString()</td>
-                <td>@booking.RoomsBooked</td>
+                <td>@booking.NumberOfGuests</td>
                 <td>
                     <a class="btn btn-sm btn-warning" asp-page="Edit" asp-route-id="@booking.Id">Edit</a>
                     <a class="btn btn-sm btn-danger" asp-page="Delete" asp-route-id="@booking.Id">Cancel</a>
@@ -37,3 +37,4 @@
         }
     </tbody>
 </table>
+

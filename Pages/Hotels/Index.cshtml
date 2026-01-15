@@ -44,9 +44,9 @@
                             {
                                 <span class="badge bg-light text-dark me-1">@amenity</span>
                             }
-                            @if (hotel.Amenities.Count > 3)
+                            @if (hotel.Amenities.Split(",").Length > 3)
                             {
-                                <span class="badge bg-light text-dark">+@(hotel.Amenities.Count - 3) more</span>
+                                <span class="badge bg-light text-dark">+@(hotel.Amenities.Split(",").Length - 3) more</span>
                             }
                         </div>
                         

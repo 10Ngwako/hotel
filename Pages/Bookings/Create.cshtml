@@ -4,40 +4,294 @@
     ViewData["Title"] = "New Booking";
 }
 
-<h1>New Booking</h1>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h1 class="h3 mb-0">
+                        <i class="fas fa-calendar-check me-2"></i>New Booking
+                    </h1>
+                </div>
+                <div class="card-body">
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger">
+                            <h5><i class="fas fa-exclamation-triangle me-2"></i>Please fix the following errors:</h5>
+                            <ul class="mb-0">
+                                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                {
+                                    <li>@error.ErrorMessage</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                    
+                    <form method="post" id="bookingForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Booking.CustomerName" class="form-label">
+                                    <i class="fas fa-user me-1"></i>Full Name *
+                                </label>
+                                <input asp-for="Booking.CustomerName" class="form-control" 
+                                       placeholder="Enter your full name" />
+                                <span asp-validation-for="Booking.CustomerName" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Booking.CustomerEmail" class="form-label">
+                                    <i class="fas fa-envelope me-1"></i>Email Address *
+                                </label>
+                                <input asp-for="Booking.CustomerEmail" class="form-control" 
+                                       placeholder="you@example.com" />
+                                <span asp-validation-for="Booking.CustomerEmail" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="Booking.HotelId" class="form-label">
+                                <i class="fas fa-hotel me-1"></i>Select Hotel *
+                            </label>
+                            <select asp-for="Booking.HotelId" class="form-select" id="hotelSelect">
+                                <option value="">-- Select a Hotel --</option>
+                                @foreach (var hotel in Model.Hotels)
+                                {
+                                    <option value="@hotel.Id" data-price="@hotel.PricePerNight">
+                                        @hotel.Name - $@hotel.PricePerNight.ToString("F2")/night
+                                    </option>
+                                }
+                            </select>
+                            <span asp-validation-for="Booking.HotelId" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Booking.CheckInDate" class="form-label">
+                                    <i class="fas fa-sign-in-alt me-1"></i>Check-in Date *
+                                </label>
+                                <input asp-for="Booking.CheckInDate" class="form-control" 
+                                       type="date" id="checkInDate" />
+                                <span asp-validation-for="Booking.CheckInDate" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Booking.CheckOutDate" class="form-label">
+                                    <i class="fas fa-sign-out-alt me-1"></i>Check-out Date *
+                                </label>
+                                <input asp-for="Booking.CheckOutDate" class="form-control" 
+                                       type="date" id="checkOutDate" />
+                                <span asp-validation-for="Booking.CheckOutDate" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="Booking.NumberOfGuests" class="form-label">
+                                <i class="fas fa-users me-1"></i>Number of Guests *
+                            </label>
+                            <div class="input-group">
+                                <button type="button" class="btn btn-outline-secondary" id="decreaseGuests">-</button>
+                                <input asp-for="Booking.NumberOfGuests" class="form-control text-center" 
+                                       min="1" max="10" value="1" id="guestsInput" />
+                                <button type="button" class="btn btn-outline-secondary" id="increaseGuests">+</button>
+                            </div>
+                            <span asp-validation-for="Booking.NumberOfGuests" class="text-danger small"></span>
+                        </div>
+                        
+                        <!-- Price Summary -->
+                        <div class="card mb-4 bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <i class="fas fa-receipt me-2"></i>Booking Summary
+                                </h5>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <p class="mb-1">Nightly Rate:</p>
+                                        <p class="mb-1">Number of Nights:</p>
+                                        <p class="mb-1">Number of Guests:</p>
+                                        <hr class="my-2">
+                                        <h5 class="mb-0 fw-bold">Total Amount:</h5>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <p class="mb-1" id="nightlyRate">$0.00</p>
+                                        <p class="mb-1" id="nightsCount">0</p>
+                                        <p class="mb-1" id="guestsCount">1</p>
+                                        <hr class="my-2">
+                                        <h5 class="mb-0 fw-bold text-primary" id="totalAmount">$0.00</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg flex-fill" id="submitBtn">
+                                <i class="fas fa-calendar-check me-2"></i>Confirm Booking
+                            </button>
+                            <a class="btn btn-outline-secondary btn-lg" asp-page="Index">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<form method="post">
-    <div class="form-group">
-        <label asp-for="Booking.CustomerName"></label>
-        <input asp-for="Booking.CustomerName" class="form-control" />
-        <span asp-validation-for="Booking.CustomerName" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Booking.CustomerEmail"></label>
-        <input asp-for="Booking.CustomerEmail" class="form-control" />
-        <span asp-validation-for="Booking.CustomerEmail" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Booking.HotelId"></label>
-        <select asp-for="Booking.HotelId" class="form-control" asp-items="@(new SelectList(Model.Hotels, "Id", "Name"))"></select>
-        <span asp-validation-for="Booking.HotelId" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Booking.CheckInDate"></label>
-        <input asp-for="Booking.CheckInDate" class="form-control" />
-        <span asp-validation-for="Booking.CheckInDate" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Booking.CheckOutDate"></label>
-        <input asp-for="Booking.CheckOutDate" class="form-control" />
-        <span asp-validation-for="Booking.CheckOutDate" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Booking.RoomsBooked"></label>
-        <input asp-for="Booking.RoomsBooked" class="form-control" />
-        <span asp-validation-for="Booking.RoomsBooked" class="text-danger"></span>
-    </div>
+@section Styles {
+    <style>
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .card {
+            border: none;
+            border-radius: 15px;
+        }
+        
+        .card-header {
+            border-radius: 15px 15px 0 0 !important;
+        }
+        
+        #submitBtn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        #submitBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        #submitBtn:active {
+            transform: translateY(0);
+        }
+    </style>
+}
 
-    <button type="submit" class="btn btn-success mt-2">Book Now</button>
-    <a class="btn btn-secondary mt-2" asp-page="Index">Cancel</a>
-</form>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set minimum dates
+            const today = new Date().toISOString().split('T')[0];
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const tomorrowStr = tomorrow.toISOString().split('T')[0];
+            
+            const checkInInput = document.getElementById('checkInDate');
+            const checkOutInput = document.getElementById('checkOutDate');
+            
+            if (checkInInput) {
+                checkInInput.min = today;
+                checkInInput.value = today;
+                
+                checkInInput.addEventListener('change', function() {
+                    const selectedDate = new Date(this.value);
+                    const nextDay = new Date(selectedDate);
+                    nextDay.setDate(nextDay.getDate() + 1);
+                    checkOutInput.min = nextDay.toISOString().split('T')[0];
+                    
+                    if (new Date(checkOutInput.value) < nextDay) {
+                        checkOutInput.value = nextDay.toISOString().split('T')[0];
+                    }
+                    
+                    calculateTotal();
+                });
+            }
+            
+            if (checkOutInput) {
+                checkOutInput.min = tomorrowStr;
+                checkOutInput.value = tomorrowStr;
+                checkOutInput.addEventListener('change', calculateTotal);
+            }
+            
+            // Guests counter
+            const guestsInput = document.getElementById('guestsInput');
+            const decreaseBtn = document.getElementById('decreaseGuests');
+            const increaseBtn = document.getElementById('increaseGuests');
+            
+            decreaseBtn.addEventListener('click', function() {
+                let value = parseInt(guestsInput.value);
+                if (value > 1) {
+                    guestsInput.value = value - 1;
+                    calculateTotal();
+                }
+            });
+            
+            increaseBtn.addEventListener('click', function() {
+                let value = parseInt(guestsInput.value);
+                if (value < 10) {
+                    guestsInput.value = value + 1;
+                    calculateTotal();
+                }
+            });
+            
+            guestsInput.addEventListener('change', function() {
+                let value = parseInt(this.value);
+                if (value < 1) this.value = 1;
+                if (value > 10) this.value = 10;
+                calculateTotal();
+            });
+            
+            // Hotel selection
+            const hotelSelect = document.getElementById('hotelSelect');
+            hotelSelect.addEventListener('change', calculateTotal);
+            
+            // Calculate total amount
+            function calculateTotal() {
+                const hotelSelect = document.getElementById('hotelSelect');
+                const selectedOption = hotelSelect.options[hotelSelect.selectedIndex];
+                const pricePerNight = selectedOption ? parseFloat(selectedOption.getAttribute('data-price')) : 0;
+                
+                const checkIn = new Date(document.getElementById('checkInDate').value);
+                const checkOut = new Date(document.getElementById('checkOutDate').value);
+                const nights = Math.max(0, Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24)));
+                
+                const guests = parseInt(document.getElementById('guestsInput').value) || 1;
+                
+                // Update display
+                document.getElementById('nightlyRate').textContent = `$${pricePerNight.toFixed(2)}`;
+                document.getElementById('nightsCount').textContent = nights;
+                document.getElementById('guestsCount').textContent = guests;
+                
+                // Calculate total (price * nights * guests)
+                const total = pricePerNight * nights * guests;
+                document.getElementById('totalAmount').textContent = `$${total.toFixed(2)}`;
+            }
+            
+            // Initial calculation
+            calculateTotal();
+            
+            // Form submission handling
+            const bookingForm = document.getElementById('bookingForm');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            bookingForm.addEventListener('submit', function(e) {
+                // Validate dates
+                const checkIn = new Date(document.getElementById('checkInDate').value);
+                const checkOut = new Date(document.getElementById('checkOutDate').value);
+                
+                if (checkOut <= checkIn) {
+                    e.preventDefault();
+                    alert('Check-out date must be after check-in date.');
+                    return;
+                }
+                
+                // Show loading state
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+                
+                // The form will submit normally here
+                // If there are validation errors, they'll show up in the alert box
+            });
+            
+            // Prevent form submission on Enter in input fields
+            bookingForm.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && e.target.tagName !== 'BUTTON' && e.target.type !== 'submit') {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+}

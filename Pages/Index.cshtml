@@ -1,74 +1,1212 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Home - Book Luxury Hotels Worldwide";
 }
 
-<div class="container mt-5">
-    <!-- Hero Section -->
-    <div class="jumbotron text-center p-5 bg-light rounded shadow-sm">
-        <h1 class="display-4">Welcome to Hotel Booking System</h1>
-        <p class="lead">Book hotels easily and manage your bookings.</p>
-        <div class="mt-4">
-            <a class="btn btn-primary btn-lg mx-2" asp-page="/Hotels/Index">View Hotels</a>
-            <a class="btn btn-success btn-lg mx-2" asp-page="/Bookings/Index">View Bookings</a>
+<!-- Hero Section -->
+<section class="hero-section position-relative overflow-hidden text-white">
+    <!-- Video Controls -->
+    <div class="video-selector position-absolute top-0 end-0 mt-3 me-3 z-4 d-none d-md-block">
+        <div class="dropdown">
+            <button class="btn btn-sm btn-outline-light dropdown-toggle" type="button" id="videoSelectDropdown" data-bs-toggle="dropdown">
+                <i class="fas fa-video"></i> Scene
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#" data-video="beach">🏖️ Beach Sunset</a></li>
+                <li><a class="dropdown-item" href="#" data-video="mountains">⛰️ Mountain Retreat</a></li>
+                <li><a class="dropdown-item" href="#" data-video="forest">🌲 Forest Sanctuary</a></li>
+                <li><a class="dropdown-item" href="#" data-video="city">🏙️ City Lights</a></li>
+            </ul>
         </div>
+        <button class="btn btn-sm btn-outline-light ms-2" id="toggleSound">
+            <i class="fas fa-volume-mute" id="soundIcon"></i>
+        </button>
     </div>
 
-    <!-- Featured Hotels Section -->
-    <h2 class="mt-5 mb-3 text-center">Featured Hotels</h2>
-    <div class="row">
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm">
-                <img src="/images/hotel1.jpg" class="card-img-top" alt="Hotel 1">
-                <div class="card-body">
-                    <h5 class="card-title">Ocean View Resort</h5>
-                    <p class="card-text">Enjoy luxury by the beach with stunning views.</p>
-                    <a class="btn btn-primary" asp-page="/Hotels/Index">Book Now</a>
+    <!-- Video Background -->
+    <div class="video-background">
+        <video autoplay muted loop playsinline class="hero-video active" id="mainVideo" data-type="beach">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-white-sand-beach-and-palm-trees-1564-large.mp4" type="video/mp4">
+        </video>
+        
+        <video muted loop playsinline class="hero-video" id="mountainVideo" data-type="mountains">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-misty-mountains-at-sunset-2828-large.mp4" type="video/mp4">
+        </video>
+        
+        <video muted loop playsinline class="hero-video" id="forestVideo" data-type="forest">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-sun-rays-through-the-leaves-of-a-tree-1422-large.mp4" type="video/mp4">
+        </video>
+        
+        <video muted loop playsinline class="hero-video" id="cityVideo" data-type="city">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-city-traffic-at-night-3450-large.mp4" type="video/mp4">
+        </video>
+        
+        <div class="video-overlay"></div>
+    </div>
+    
+    <!-- Audio Elements -->
+    <audio id="ambientAudio" loop>
+        <!-- Using CDN links that should work -->
+        <source src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_9e8f3e8b79.mp3?filename=forest-with-small-river-birds-and-nature-field-recording-6735.mp3" type="audio/mpeg">
+    </audio>
+    
+    <!-- Floating Elements -->
+    <div class="floating-elements">
+        <div class="floating-element element-1">
+            <i class="fas fa-water text-info opacity-50"></i>
+        </div>
+        <div class="floating-element element-2">
+            <i class="fas fa-leaf text-success opacity-50"></i>
+        </div>
+        <div class="floating-element element-3">
+            <i class="fas fa-cloud text-light opacity-50"></i>
+        </div>
+        <div class="floating-element element-4">
+            <i class="fas fa-star text-warning opacity-50"></i>
+        </div>
+    </div>
+    
+    <div class="container position-relative z-3">
+        <div class="row min-vh-80 align-items-center">
+            <div class="col-lg-8">
+                <div class="typewriter-container mb-4">
+                    <h1 class="display-3 fw-bold mb-4">
+                        <span id="typed-text" class="text-white"></span>
+                        <span class="text-warning typewriter-cursor">|</span>
+                    </h1>
+                </div>
+                
+                <p class="lead mb-5 animate__animated animate__fadeInUp pulse-text">
+                    <i class="fas fa-spa me-2"></i>
+                    Find your perfect escape. Experience luxury with tranquility.
+                    <i class="fas fa-heart ms-2"></i>
+                </p>
+                
+                <!-- FIXED: Working Search Form with Proper Redirect -->
+                <div class="search-widget card shadow-lg animate__animated animate__fadeInUp animate__delay-1s glass-morphism">
+                    <div class="card-body p-4">
+                        <div class="search-header mb-4">
+                            <h4 class="text-dark mb-2">
+                                <i class="fas fa-search text-primary me-2"></i>
+                                Find Your Peaceful Stay
+                            </h4>
+                            <p class="text-muted mb-0">Discover hotels designed for relaxation and rejuvenation</p>
+                        </div>
+                        
+                        <!-- Form will submit to Hotels/Search page -->
+                        <form method="get" asp-page="/Hotels/Search" id="searchForm">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label text-dark">
+                                        <i class="fas fa-map-marker-alt text-primary"></i> Destination
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light">
+                                            <i class="fas fa-compass text-primary"></i>
+                                        </span>
+                                        <input type="text" class="form-control form-control-lg" 
+                                               name="location" placeholder="Where is your soul calling you?" 
+                                               id="destinationInput" list="destinationSuggestions" required>
+                                        <datalist id="destinationSuggestions">
+                                            <option value="Bali, Indonesia"> Bali, Indonesia </option>
+                                            <option value="Santorini, Greece"> Santorini, Greece </option>
+                                            <option value="Kyoto, Japan"> Kyoto, Japan </option>
+                                            <option value="Swiss Alps"> Swiss Alps </option>
+                                            <option value="Maldives"> Maldives </option>
+                                            <option value="Lake Como, Italy"> Lake Como, Italy </option>
+                                            <option value="Big Sur, California"> Big Sur, California </option>
+                                        </datalist>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <label class="form-label text-dark">
+                                        <i class="fas fa-calendar-alt text-primary"></i> Check-in
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light">
+                                            <i class="fas fa-calendar text-primary"></i>
+                                        </span>
+                                        <input type="date" class="form-control form-control-lg" 
+                                               name="checkInDate" id="checkInDate" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <label class="form-label text-dark">
+                                        <i class="fas fa-calendar-alt text-primary"></i> Check-out
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light">
+                                            <i class="fas fa-calendar-check text-primary"></i>
+                                        </span>
+                                        <input type="date" class="form-control form-control-lg" 
+                                               name="checkOutDate" id="checkOutDate" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-2 d-flex align-items-end">
+                                    <button type="submit" class="btn btn-primary btn-lg w-100 peace-button">
+                                        <i class="fas fa-search me-2"></i> 
+                                        <span class="d-none d-md-inline">Search</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Advanced Filters -->
+                            <div class="mt-4">
+                                <a href="#advancedFilters" class="text-decoration-none" 
+                                   data-bs-toggle="collapse" role="button" aria-expanded="false">
+                                    <small class="text-primary">
+                                        <i class="fas fa-sliders-h me-1"></i> Advanced Preferences
+                                    </small>
+                                </a>
+                                
+                                <div class="collapse mt-3" id="advancedFilters">
+                                    <div class="row g-3">
+                                        <div class="col-md-3">
+                                            <label class="form-label text-dark small">Hotel Type</label>
+                                            <select class="form-select" name="hotelType">
+                                                <option value="">Any</option>
+                                                <option value="spa">Spa Resort</option>
+                                                <option value="eco">Eco Lodge</option>
+                                                <option value="boutique">Boutique Hotel</option>
+                                                <option value="beach">Beach Resort</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="col-md-3">
+                                            <label class="form-label text-dark small">Amenities</label>
+                                            <select class="form-select" name="amenities">
+                                                <option value="">Any</option>
+                                                <option value="spa">Spa</option>
+                                                <option value="yoga">Yoga Studio</option>
+                                                <option value="pool">Infinity Pool</option>
+                                                <option value="beach">Private Beach</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="col-md-3">
+                                            <label class="form-label text-dark small">Guests</label>
+                                            <input type="number" class="form-control" name="guests" min="1" max="10" value="2" placeholder="Guests">
+                                        </div>
+                                        
+                                        <div class="col-md-3">
+                                            <label class="form-label text-dark small">Price Range</label>
+                                            <select class="form-select" name="priceRange">
+                                                <option value="">Any</option>
+                                                <option value="100-300">$100 - $300</option>
+                                                <option value="300-500">$300 - $500</option>
+                                                <option value="500-1000">$500 - $1,000</option>
+                                                <option value="1000+">$1,000+</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div class="quick-options mt-4">
+                    <div class="d-flex flex-wrap gap-2">
+                        <a asp-page="/Hotels/Featured" class="btn btn-outline-light btn-sm relaxation-btn">
+                            <i class="fas fa-crown me-1"></i> Featured
+                        </a>
+                        <a asp-page="/Hotels/Spa" class="btn btn-outline-light btn-sm relaxation-btn">
+                            <i class="fas fa-spa me-1"></i> Spa Hotels
+                        </a>
+                        <a asp-page="/Hotels/Luxury" class="btn btn-outline-light btn-sm relaxation-btn">
+                            <i class="fas fa-gem me-1"></i> Luxury
+                        </a>
+                        <a asp-page="/Hotels/Eco" class="btn btn-outline-light btn-sm relaxation-btn">
+                            <i class="fas fa-leaf me-1"></i> Eco-Friendly
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm">
-                <img src="/images/hotel2.jpg" class="card-img-top" alt="Hotel 2">
-                <div class="card-body">
-                    <h5 class="card-title">Mountain Escape</h5>
-                    <p class="card-text">Relax in the serene mountains and enjoy nature.</p>
-                    <a class="btn btn-primary" asp-page="/Hotels/Index">Book Now</a>
+    </div>
+    
+    <!-- Live Booking Counter -->
+    <div class="booking-counter position-absolute bottom-0 start-0 end-0 bg-primary bg-opacity-90 text-white py-3 wave-effect">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-3 col-6 mb-3 mb-md-0">
+                    <div class="counter-item">
+                        <i class="fas fa-users fa-2x mb-2 pulse-icon"></i>
+                        <h3 class="mb-0 counter" data-count="10000">0</h3>
+                        <small class="text-light">Happy Guests</small>
+                    </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm">
-                <img src="/images/hotel3.jpg" class="card-img-top" alt="Hotel 3">
-                <div class="card-body">
-                    <h5 class="card-title">City Central Hotel</h5>
-                    <p class="card-text">Stay in the heart of the city with all conveniences.</p>
-                    <a class="btn btn-primary" asp-page="/Hotels/Index">Book Now</a>
+                <div class="col-md-3 col-6 mb-3 mb-md-0">
+                    <div class="counter-item">
+                        <i class="fas fa-hotel fa-2x mb-2 pulse-icon"></i>
+                        <h3 class="mb-0 counter" data-count="2500">0</h3>
+                        <small class="text-light">Luxury Hotels</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="counter-item">
+                        <i class="fas fa-globe-americas fa-2x mb-2 pulse-icon"></i>
+                        <h3 class="mb-0 counter" data-count="150">0</h3>
+                        <small class="text-light">Countries</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="counter-item">
+                        <i class="fas fa-calendar-check fa-2x mb-2 pulse-icon"></i>
+                        <h3 class="mb-0 counter" data-count="50000">0</h3>
+                        <small class="text-light">Bookings</small>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</section>
 
-    <!-- How It Works Section -->
-    <h2 class="mt-5 mb-3 text-center">How It Works</h2>
-    <div class="row text-center">
-        <div class="col-md-4 mb-3">
-            <i class="bi bi-search display-4 text-primary"></i>
-            <h5 class="mt-2">Find Hotels</h5>
-            <p>Search hotels by location, price, and amenities easily.</p>
+<!-- Featured Hotels -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="display-5 fw-bold mb-3">Featured <span class="text-primary">Luxury</span> Hotels</h2>
+                <p class="lead">Handpicked selection of our most exclusive properties</p>
+            </div>
         </div>
-        <div class="col-md-4 mb-3">
-            <i class="bi bi-calendar-check display-4 text-success"></i>
-            <h5 class="mt-2">Book a Room</h5>
-            <p>Reserve your room in a few clicks with secure booking.</p>
+        
+        <div class="row g-4">
+            @if (Model.FeaturedHotels != null && Model.FeaturedHotels.Any())
+            {
+                @foreach (var hotel in Model.FeaturedHotels)
+                {
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card hotel-card shadow-sm border-0 overflow-hidden h-100 hover-3d">
+                            <div class="position-relative">
+                                <img src="@hotel.ImageUrl" class="card-img-top" alt="@hotel.Name" style="height: 250px; object-fit: cover;">
+                                <div class="position-absolute top-0 end-0 m-3">
+                                    <span class="badge bg-warning text-dark">
+                                        <i class="fas fa-star"></i> @hotel.Rating
+                                    </span>
+                                </div>
+                                <div class="position-absolute bottom-0 start-0 end-0 p-3 bg-gradient">
+                                    <h5 class="text-white mb-0">@hotel.Name</h5>
+                                    <small class="text-white-50">
+                                        <i class="fas fa-map-marker-alt"></i> @hotel.Location
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">@hotel.Description</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h4 class="text-primary mb-0">$@hotel.PricePerNight.ToString("F2")</h4>
+                                        <small class="text-muted">per night</small>
+                                    </div>
+                                    <a asp-page="/Hotels/Details" asp-route-id="@hotel.Id" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-eye"></i> View Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <!-- Fallback featured hotels -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card hotel-card shadow-sm border-0 overflow-hidden h-100 hover-3d">
+                        <div class="position-relative">
+                            <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
+                                 class="card-img-top" alt="Luxury Hotel" style="height: 250px; object-fit: cover;">
+                            <div class="position-absolute top-0 end-0 m-3">
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-star"></i> 4.8
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">PALAZZO DI BORGO</h5>
+                            <p class="card-text text-muted">
+                                <i class="fas fa-map-marker-alt"></i> Milan, Italy
+                            </p>
+                            <p>Luxury hotel in the heart of Milan with stunning architecture and premium amenities.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h4 class="text-primary mb-0">$299.99</h4>
+                                <a href="/Hotels/Details/1" class="btn btn-primary">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Add 2 more fallback hotels similarly -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card hotel-card shadow-sm border-0 overflow-hidden h-100 hover-3d">
+                        <div class="position-relative">
+                            <img src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
+                                 class="card-img-top" alt="Beach Resort" style="height: 250px; object-fit: cover;">
+                            <div class="position-absolute top-0 end-0 m-3">
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-star"></i> 4.9
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">OCEAN PARADISE RESORT</h5>
+                            <p class="card-text text-muted">
+                                <i class="fas fa-map-marker-alt"></i> Bali, Indonesia
+                            </p>
+                            <p>Private beach resort with overwater bungalows and world-class spa facilities.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h4 class="text-primary mb-0">$499.99</h4>
+                                <a href="/Hotels/Details/2" class="btn btn-primary">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="card hotel-card shadow-sm border-0 overflow-hidden h-100 hover-3d">
+                        <div class="position-relative">
+                            <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" 
+                                 class="card-img-top" alt="Mountain Retreat" style="height: 250px; object-fit: cover;">
+                            <div class="position-absolute top-0 end-0 m-3">
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-star"></i> 4.7
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">ALPINE SANCTUARY LODGE</h5>
+                            <p class="card-text text-muted">
+                                <i class="fas fa-map-marker-alt"></i> Swiss Alps
+                            </p>
+                            <p>Secluded mountain lodge with panoramic views and wellness center.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h4 class="text-primary mb-0">$399.99</h4>
+                                <a href="/Hotels/Details/3" class="btn btn-primary">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
-        <div class="col-md-4 mb-3">
-            <i class="bi bi-check-circle display-4 text-warning"></i>
-            <h5 class="mt-2">Enjoy Your Stay</h5>
-            <p>Relax knowing your booking is confirmed and hassle-free.</p>
+        
+        <!-- View All Button -->
+        <div class="text-center mt-5">
+            <a asp-page="/Hotels/All" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-hotel me-2"></i> View All Hotels
+            </a>
         </div>
     </div>
-</div>
+</section>
+
+<!-- Soundscape Player Section -->
+<section class="py-5 bg-dark text-white" id="soundscape">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <h2 class="display-6 fw-bold mb-4">
+                    <i class="fas fa-headphones me-2"></i>
+                    Calming Soundscapes
+                </h2>
+                <p class="lead mb-4">Listen to relaxing sounds as you browse our collection</p>
+                <p class="mb-4">Research shows that calming sounds can reduce stress and enhance your browsing experience.</p>
+                
+                <div class="sound-info">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-check-circle text-success me-3 fa-lg"></i>
+                        <div>
+                            <h5 class="mb-0">Reduce Stress</h5>
+                            <small class="text-white-50">Lower cortisol levels by 25%</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-check-circle text-success me-3 fa-lg"></i>
+                        <div>
+                            <h5 class="mb-0">Improve Focus</h5>
+                            <small class="text-white-50">Enhance concentration while browsing</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-check-circle text-success me-3 fa-lg"></i>
+                        <div>
+                            <h5 class="mb-0">Better Decisions</h5>
+                            <small class="text-white-50">Make more thoughtful booking choices</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="soundscape-player p-5 rounded-3 glass-morphism">
+                    <h4 class="mb-4 text-center">
+                        <i class="fas fa-music me-2"></i>
+                        Sound Player
+                    </h4>
+                    
+                    <!-- FIXED: Working Sound Player -->
+                    <div class="sound-options">
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <button class="sound-btn w-100 active" data-sound="ocean">
+                                    <i class="fas fa-water fa-2x mb-2"></i>
+                                    <h6>Ocean Waves</h6>
+                                    <small class="text-muted">Soothing seashore</small>
+                                    <div class="sound-wave sound-wave-active"></div>
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="sound-btn w-100" data-sound="rain">
+                                    <i class="fas fa-cloud-rain fa-2x mb-2"></i>
+                                    <h6>Gentle Rain</h6>
+                                    <small class="text-muted">Peaceful rainfall</small>
+                                    <div class="sound-wave"></div>
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="sound-btn w-100" data-sound="forest">
+                                    <i class="fas fa-tree fa-2x mb-2"></i>
+                                    <h6>Forest Birds</h6>
+                                    <small class="text-muted">Morning chorus</small>
+                                    <div class="sound-wave"></div>
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="sound-btn w-100" data-sound="fireplace">
+                                    <i class="fas fa-fire fa-2x mb-2"></i>
+                                    <h6>Crackling Fire</h6>
+                                    <small class="text-muted">Cozy fireplace</small>
+                                    <div class="sound-wave"></div>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="sound-controls">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <button class="btn btn-outline-light" id="playPauseSound">
+                                    <i class="fas fa-play" id="playIcon"></i>
+                                </button>
+                                
+                                <div class="flex-grow-1 mx-3">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <small id="currentSoundName">Ocean Waves</small>
+                                        <small id="currentTime">0:00</small>
+                                    </div>
+                                    <input type="range" class="form-range" id="progressBar" min="0" max="100" value="0">
+                                </div>
+                                
+                                <button class="btn btn-outline-light" id="stopSound">
+                                    <i class="fas fa-stop"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-volume-down text-muted me-2"></i>
+                                <input type="range" class="form-range flex-grow-1 me-2" id="volumeControl" min="0" max="100" value="50">
+                                <i class="fas fa-volume-up text-muted"></i>
+                                <span class="ms-2 small" id="volumePercent">50%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Special Offers -->
+<section class="py-5 bg-gradient-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h2 class="display-6 fw-bold">Summer Sale! Up to 40% Off</h2>
+                <p class="lead">Book your summer getaway now and enjoy exclusive discounts</p>
+                <div id="countdown" class="d-flex gap-3 my-4">
+                    <div class="text-center">
+                        <div class="countdown-box bg-white text-dark rounded p-3">
+                            <div class="countdown-number" id="days">00</div>
+                            <small>Days</small>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="countdown-box bg-white text-dark rounded p-3">
+                            <div class="countdown-number" id="hours">00</div>
+                            <small>Hours</small>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="countdown-box bg-white text-dark rounded p-3">
+                            <div class="countdown-number" id="minutes">00</div>
+                            <small>Minutes</small>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="countdown-box bg-white text-dark rounded p-3">
+                            <div class="countdown-number" id="seconds">00</div>
+                            <small>Seconds</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                <div class="offer-badge p-4 bg-white text-dark rounded shadow-lg">
+                    <h3 class="text-danger fw-bold">40% OFF</h3>
+                    <p class="mb-0">Use code: <strong>SUMMER2024</strong></p>
+                    <small class="text-muted">Valid until Dec 31, 2024</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="display-6 fw-bold mb-4">Get Exclusive Deals</h2>
+                <p class="lead mb-4">Subscribe to our newsletter and be the first to know about special offers</p>
+                
+                <form id="newsletterForm" class="row g-3 justify-content-center">
+                    <div class="col-md-6">
+                        <input type="email" class="form-control form-control-lg" 
+                               placeholder="Enter your email" required id="newsletterEmail">
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            Subscribe <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="mt-4">
+                    <small class="text-muted">
+                        <i class="fas fa-lock"></i> We respect your privacy. Unsubscribe at any time.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Trust Indicators -->
+<section class="py-4 bg-white">
+    <div class="container">
+        <div class="row align-items-center justify-content-around">
+            <div class="col-auto text-center">
+                <i class="fas fa-shield-alt fa-3x text-success mb-2"></i>
+                <p class="mb-0 fw-bold">Secure Booking</p>
+            </div>
+            <div class="col-auto text-center">
+                <i class="fas fa-headset fa-3x text-primary mb-2"></i>
+                <p class="mb-0 fw-bold">24/7 Support</p>
+            </div>
+            <div class="col-auto text-center">
+                <i class="fas fa-tag fa-3x text-danger mb-2"></i>
+                <p class="mb-0 fw-bold">Best Price Guarantee</p>
+            </div>
+            <div class="col-auto text-center">
+                <i class="fas fa-sync-alt fa-3x text-warning mb-2"></i>
+                <p class="mb-0 fw-bold">Free Cancellation</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Hero Section */
+        .hero-section {
+            min-height: 90vh;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        }
+        
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .hero-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4;
+            transition: opacity 1.5s ease-in-out;
+        }
+        
+        .hero-video.active {
+            opacity: 0.4;
+        }
+        
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.8) 0%, rgba(42, 82, 152, 0.6) 100%);
+        }
+        
+        /* Floating Elements */
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .floating-element {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .element-1 { top: 20%; left: 10%; animation-delay: 0s; }
+        .element-2 { top: 40%; right: 15%; animation-delay: 1s; }
+        .element-3 { bottom: 30%; left: 20%; animation-delay: 2s; }
+        .element-4 { bottom: 20%; right: 10%; animation-delay: 3s; }
+        
+        @@keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        /* Glass Morphism */
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+        }
+        
+        /* Typewriter */
+        .typewriter-cursor {
+            animation: blink 1s infinite;
+        }
+        
+        @@keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        /* Buttons */
+        .peace-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .peace-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .relaxation-btn {
+            transition: all 0.3s ease;
+            border-radius: 20px;
+        }
+        
+        .relaxation-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+        
+        /* Sound Player */
+        .sound-btn {
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sound-btn:hover, .sound-btn.active {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        .sound-wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
+            opacity: 0;
+        }
+        
+        .sound-wave-active {
+            animation: wave 2s infinite linear;
+            opacity: 1;
+        }
+        
+        @@keyframes wave {
+            0% { background-position: -200px 0; }
+            100% { background-position: 200px 0; }
+        }
+        
+        /* Pulse Animation */
+        .pulse-icon {
+            animation: pulse 2s infinite;
+        }
+        
+        .pulse-text {
+            animation: gentlePulse 4s infinite;
+        }
+        
+        @@keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        @@keyframes gentlePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        /* Wave Effect */
+        .wave-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .wave-effect::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -100px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 45%;
+            animation: wave-animation 10s infinite linear;
+        }
+        
+        @@keyframes wave-animation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Hotel Cards */
+        .hotel-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 15px;
+        }
+        
+        .hotel-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
+        }
+        
+        .hover-3d:hover {
+            transform: perspective(1000px) rotateY(5deg) rotateX(5deg) translateY(-10px);
+        }
+        
+        .bg-gradient {
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+        }
+        
+        /* Countdown */
+        .countdown-box {
+            min-width: 80px;
+        }
+        
+        .countdown-number {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        /* Responsive */
+        @@media (max-width: 768px) {
+            .display-3 {
+                font-size: 2.2rem;
+            }
+            .hero-section {
+                min-height: 70vh;
+            }
+            .typewriter-container {
+                min-height: 90px;
+            }
+        }
+    </style>
+}
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Typewriter Effect
+            var typed = new Typed('#typed-text', {
+                strings: [
+                    "Find Your Sanctuary",
+                    "Discover Peaceful Stays",
+                    "Escape to Luxury",
+                    "Breathe in Paradise"
+                ],
+                typeSpeed: 70,
+                backSpeed: 50,
+                backDelay: 2000,
+                startDelay: 500,
+                loop: true,
+                showCursor: false
+            });
+            
+            // Video Selection
+            const videoButtons = document.querySelectorAll('.dropdown-item[data-video]');
+            const videos = {
+                beach: document.getElementById('mainVideo'),
+                mountains: document.getElementById('mountainVideo'),
+                forest: document.getElementById('forestVideo'),
+                city: document.getElementById('cityVideo')
+            };
+            
+            videoButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const videoType = this.getAttribute('data-video');
+                    
+                    // Hide all videos
+                    Object.values(videos).forEach(video => {
+                        video.classList.remove('active');
+                        video.pause();
+                    });
+                    
+                    // Show selected video
+                    if (videos[videoType]) {
+                        videos[videoType].classList.add('active');
+                        videos[videoType].play();
+                    }
+                });
+            });
+            
+            // Sound System - FIXED WITH WORKING AUDIO
+            const soundButtons = document.querySelectorAll('.sound-btn');
+            const playPauseBtn = document.getElementById('playPauseSound');
+            const stopBtn = document.getElementById('stopSound');
+            const progressBar = document.getElementById('progressBar');
+            const volumeControl = document.getElementById('volumeControl');
+            const volumePercent = document.getElementById('volumePercent');
+            const currentSoundName = document.getElementById('currentSoundName');
+            const currentTime = document.getElementById('currentTime');
+            
+            // Sound files from reliable CDN
+            const sounds = {
+                ocean: 'https://assets.mixkit.co/sfx/preview/mixkit-ocean-waves-loop-1244.mp3',
+                rain: 'https://assets.mixkit.co/sfx/preview/mixkit-rain-loop-1249.mp3',
+                forest: 'https://assets.mixkit.co/sfx/preview/mixkit-forest-birds-1318.mp3',
+                fireplace: 'https://assets.mixkit.co/sfx/preview/mixkit-campfire-crackles-1330.mp3'
+            };
+            
+            const soundNames = {
+                ocean: 'Ocean Waves',
+                rain: 'Gentle Rain',
+                forest: 'Forest Birds',
+                fireplace: 'Crackling Fire'
+            };
+            
+            let currentAudio = null;
+            let isPlaying = false;
+            let currentSound = 'ocean';
+            
+            // Initialize audio
+            function initAudio(soundType) {
+                if (currentAudio) {
+                    currentAudio.pause();
+                    currentAudio = null;
+                }
+                
+                currentAudio = new Audio(sounds[soundType]);
+                currentAudio.loop = true;
+                currentAudio.volume = volumeControl.value / 100;
+                
+                currentAudio.addEventListener('timeupdate', updateProgress);
+                currentAudio.addEventListener('ended', function() {
+                    this.currentTime = 0;
+                    this.play();
+                });
+            }
+            
+            // Initialize with ocean sound
+            initAudio('ocean');
+            
+            // Sound button click
+            soundButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const soundType = this.getAttribute('data-sound');
+                    
+                    // Update UI
+                    soundButtons.forEach(btn => {
+                        btn.classList.remove('active');
+                        btn.querySelector('.sound-wave').classList.remove('sound-wave-active');
+                    });
+                    
+                    this.classList.add('active');
+                    this.querySelector('.sound-wave').classList.add('sound-wave-active');
+                    
+                    // Change sound
+                    currentSound = soundType;
+                    currentSoundName.textContent = soundNames[soundType];
+                    
+                    initAudio(soundType);
+                    
+                    if (isPlaying) {
+                        currentAudio.play();
+                    }
+                });
+            });
+            
+            // Play/Pause
+            playPauseBtn.addEventListener('click', function() {
+                if (!currentAudio) return;
+                
+                if (isPlaying) {
+                    currentAudio.pause();
+                    playIcon.className = 'fas fa-play';
+                    soundButtons.forEach(btn => {
+                        btn.querySelector('.sound-wave').classList.remove('sound-wave-active');
+                    });
+                } else {
+                    currentAudio.play();
+                    playIcon.className = 'fas fa-pause';
+                    document.querySelector('.sound-btn.active .sound-wave').classList.add('sound-wave-active');
+                }
+                
+                isPlaying = !isPlaying;
+            });
+            
+            // Stop
+            stopBtn.addEventListener('click', function() {
+                if (currentAudio) {
+                    currentAudio.pause();
+                    currentAudio.currentTime = 0;
+                    isPlaying = false;
+                    playIcon.className = 'fas fa-play';
+                    progressBar.value = 0;
+                    currentTime.textContent = '0:00';
+                    soundButtons.forEach(btn => {
+                        btn.querySelector('.sound-wave').classList.remove('sound-wave-active');
+                    });
+                }
+            });
+            
+            // Progress bar
+            function updateProgress() {
+                if (!currentAudio) return;
+                
+                const percent = (currentAudio.currentTime / currentAudio.duration) * 100;
+                progressBar.value = percent;
+                
+                // Update time display
+                const minutes = Math.floor(currentAudio.currentTime / 60);
+                const seconds = Math.floor(currentAudio.currentTime % 60);
+                currentTime.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            progressBar.addEventListener('input', function() {
+                if (currentAudio) {
+                    const time = (this.value / 100) * currentAudio.duration;
+                    currentAudio.currentTime = time;
+                }
+            });
+            
+            // Volume control
+            volumeControl.addEventListener('input', function() {
+                const volume = this.value / 100;
+                if (currentAudio) {
+                    currentAudio.volume = volume;
+                }
+                volumePercent.textContent = `${this.value}%`;
+            });
+            
+            // Date picker setup
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            const checkInDate = document.getElementById('checkInDate');
+            const checkOutDate = document.getElementById('checkOutDate');
+            
+            checkInDate.min = today.toISOString().split('T')[0];
+            checkOutDate.min = tomorrow.toISOString().split('T')[0];
+            
+            checkInDate.value = today.toISOString().split('T')[0];
+            checkOutDate.value = tomorrow.toISOString().split('T')[0];
+            
+            checkInDate.addEventListener('change', function() {
+                const selectedDate = new Date(this.value);
+                const nextDay = new Date(selectedDate);
+                nextDay.setDate(nextDay.getDate() + 1);
+                checkOutDate.min = nextDay.toISOString().split('T')[0];
+                
+                if (new Date(checkOutDate.value) < nextDay) {
+                    checkOutDate.value = nextDay.toISOString().split('T')[0];
+                }
+            });
+            
+            // Search form validation
+            const searchForm = document.getElementById('searchForm');
+            searchForm.addEventListener('submit', function(e) {
+                const location = document.getElementById('destinationInput').value;
+                const checkIn = document.getElementById('checkInDate').value;
+                const checkOut = document.getElementById('checkOutDate').value;
+                
+                if (!location.trim()) {
+                    e.preventDefault();
+                    alert('Please enter a destination');
+                    return;
+                }
+                
+                if (new Date(checkOut) <= new Date(checkIn)) {
+                    e.preventDefault();
+                    alert('Check-out date must be after check-in date');
+                    return;
+                }
+                
+                // Form will submit to /Hotels/Search with query parameters
+            });
+            
+            // Newsletter form
+            const newsletterForm = document.getElementById('newsletterForm');
+            newsletterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('newsletterEmail').value;
+                
+                if (email) {
+                    // Simulate API call
+                    setTimeout(() => {
+                        alert('Thank you for subscribing to our newsletter!');
+                        newsletterForm.reset();
+                    }, 500);
+                }
+            });
+            
+            // Countdown timer
+            function updateCountdown() {
+                const targetDate = new Date('2024-12-31T23:59:59');
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+                
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+                
+                if (distance < 0) {
+                    clearInterval(countdownInterval);
+                    document.getElementById('countdown').innerHTML = '<h3 class="text-white">Offer Expired!</h3>';
+                }
+            }
+            
+            const countdownInterval = setInterval(updateCountdown, 1000);
+            updateCountdown();
+            
+            // Animated counters
+            const counters = document.querySelectorAll('.counter');
+            const observerOptions = {
+                threshold: 0.5
+            };
+            
+            const counterObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const counter = entry.target;
+                        const target = parseInt(counter.getAttribute('data-count'));
+                        const increment = target / 100;
+                        let current = 0;
+                        
+                        const updateCounter = () => {
+                            if (current < target) {
+                                current += increment;
+                                counter.textContent = Math.floor(current).toLocaleString();
+                                setTimeout(updateCounter, 20);
+                            } else {
+                                counter.textContent = target.toLocaleString();
+                            }
+                        };
+                        
+                        updateCounter();
+                        counterObserver.unobserve(counter);
+                    }
+                });
+            }, observerOptions);
+            
+            counters.forEach(counter => {
+                counterObserver.observe(counter);
+            });
+            
+            // Background audio toggle (hero section)
+            const ambientAudio = document.getElementById('ambientAudio');
+            const toggleSoundBtn = document.getElementById('toggleSound');
+            const soundIcon = document.getElementById('soundIcon');
+            
+            let ambientSoundOn = false;
+            
+            if (toggleSoundBtn) {
+                toggleSoundBtn.addEventListener('click', function() {
+                    ambientSoundOn = !ambientSoundOn;
+                    
+                    if (ambientSoundOn) {
+                        ambientAudio.play().catch(e => console.log('Audio play failed:', e));
+                        soundIcon.className = 'fas fa-volume-up';
+                    } else {
+                        ambientAudio.pause();
+                        soundIcon.className = 'fas fa-volume-mute';
+                    }
+                });
+            }
+            
+            // Set ambient audio volume
+            ambientAudio.volume = 0.3;
+            
+            // Parallax effect
+            window.addEventListener('scroll', function() {
+                const scrolled = window.pageYOffset;
+                const hero = document.querySelector('.hero-section');
+                
+                if (hero) {
+                    hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+                }
+                
+                // Floating elements parallax
+                const floatingElements = document.querySelectorAll('.floating-element');
+                floatingElements.forEach((element, index) => {
+                    const speed = 0.1 + (index * 0.05);
+                    const yPos = -(scrolled * speed);
+                    element.style.transform = `translateY(${yPos}px) rotate(${scrolled * 0.1}deg)`;
+                });
+            });
+        });
+    </script>
+}
