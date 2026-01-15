@@ -1,23 +1,22 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using SimpleHotelBooking.Data;
-using SimpleHotelBooking.Models;
+using SimpleHotelBooking.Services;
 
 namespace SimpleHotelBooking.Pages.Hotels
 {
     public class IndexModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
-        public IndexModel(ApplicationDbContext context)
+        private readonly HotelService _hotelService;
+        
+        public List<Models.Hotel> Hotels { get; set; } = new();
+
+        public IndexModel(HotelService hotelService)
         {
-            _context = context;
+            _hotelService = hotelService;
         }
 
-        public IList<Hotel> Hotels { get; set; } = default!;
-
-        public async Task OnGetAsync()
+        public void OnGet()
         {
-            Hotels = await _context.Hotels.ToListAsync();
+            Hotels = _hotelService.GetAllHotels();
         }
     }
 }
