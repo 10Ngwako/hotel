@@ -19,65 +19,73 @@ build_property.TargetFrameworkIdentifier = .NETCoreApp
 build_property.TargetFrameworkVersion = v10.0
 build_property.RootNamespace = SimpleHotelBooking
 build_property.RootNamespace = SimpleHotelBooking
-build_property.ProjectDir = C:\Users\PC\hotel\SimpleHotelBooking\SimpleHotelBooking\
+build_property.ProjectDir = C:\Users\PC\hotel\SimpleHotelBooking\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 9.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\PC\hotel\SimpleHotelBooking\SimpleHotelBooking
+build_property.MSBuildProjectDirectory = C:\Users\PC\hotel\SimpleHotelBooking
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 10.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/PC/hotel/SimpleHotelBooking/SimpleHotelBooking/Pages/Bookings/Create.cshtml]
+[C:/Users/PC/hotel/SimpleHotelBooking/Pages/Bookings/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQm9va2luZ3NcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/PC/hotel/SimpleHotelBooking/SimpleHotelBooking/Pages/Bookings/Index.cshtml]
+[C:/Users/PC/hotel/SimpleHotelBooking/Pages/Bookings/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQm9va2luZ3NcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/PC/hotel/SimpleHotelBooking/SimpleHotelBooking/Pages/Error.cshtml]
+[C:/Users/PC/hotel/SimpleHotelBooking/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/PC/hotel/SimpleHotelBooking/SimpleHotelBooking/Pages/Hotels/Create.cshtml]
+[C:/Users/PC/hotel/SimpleHotelBooking/Pages/HotelDetails.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG90ZWxEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/PC/hotel/SimpleHotelBooking/Pages/Hotels/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG90ZWxzXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/PC/hotel/SimpleHotelBooking/SimpleHotelBooking/Pages/Hotels/Delete.cshtml]
+[C:/Users/PC/hotel/SimpleHotelBooking/Pages/Hotels/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG90ZWxzXERlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/PC/hotel/SimpleHotelBooking/SimpleHotelBooking/Pages/Hotels/Edit.cshtml]
+[C:/Users/PC/hotel/SimpleHotelBooking/Pages/Hotels/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG90ZWxzXEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/PC/hotel/SimpleHotelBooking/SimpleHotelBooking/Pages/Hotels/Index.cshtml]
+[C:/Users/PC/hotel/SimpleHotelBooking/Pages/Hotels/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG90ZWxzXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/PC/hotel/SimpleHotelBooking/SimpleHotelBooking/Pages/Index.cshtml]
+[C:/Users/PC/hotel/SimpleHotelBooking/Pages/Hotels/Search.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG90ZWxzXFNlYXJjaC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/PC/hotel/SimpleHotelBooking/Pages/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/PC/hotel/SimpleHotelBooking/SimpleHotelBooking/Pages/Privacy.cshtml]
+[C:/Users/PC/hotel/SimpleHotelBooking/Pages/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/PC/hotel/SimpleHotelBooking/SimpleHotelBooking/Pages/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/PC/hotel/SimpleHotelBooking/Pages/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/PC/hotel/SimpleHotelBooking/SimpleHotelBooking/Pages/_ViewImports.cshtml]
+[C:/Users/PC/hotel/SimpleHotelBooking/Pages/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/PC/hotel/SimpleHotelBooking/SimpleHotelBooking/Pages/_ViewStart.cshtml]
+[C:/Users/PC/hotel/SimpleHotelBooking/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/PC/hotel/SimpleHotelBooking/SimpleHotelBooking/Pages/Shared/_Layout.cshtml]
+[C:/Users/PC/hotel/SimpleHotelBooking/Pages/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-g8ijrd7bq1
