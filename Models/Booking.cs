@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 
 namespace SimpleHotelBooking.Models
 {
@@ -44,5 +45,26 @@ namespace SimpleHotelBooking.Models
         
         // Navigation property
         public Hotel? Hotel { get; set; }
+        
+        // Helper method to parse decimal from string (handles comma decimal separator)
+        public static decimal ParseDecimal(string value)
+        {
+            if (string.IsNullOrEmpty(value)) return 0;
+            
+            // Try parsing with current culture first
+            if (decimal.TryParse(value, NumberStyles.Any, CultureInfo.CurrentCulture, out var result))
+                return result;
+            
+            // Try with invariant culture (dot as decimal separator)
+            if (decimal.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out result))
+                return result;
+            
+            // Try replacing comma with dot
+            var normalized = value.Replace(',', '.');
+            if (decimal.TryParse(normalized, NumberStyles.Any, CultureInfo.InvariantCulture, out result))
+                return result;
+                
+            return 0;
+        }
     }
 }

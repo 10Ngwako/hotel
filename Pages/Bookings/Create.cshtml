@@ -2,6 +2,8 @@
 @model SimpleHotelBooking.Pages.Bookings.CreateModel
 @{
     ViewData["Title"] = "New Booking";
+    // Force invariant culture for decimal parsing
+    System.Globalization.CultureInfo.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 }
 
 <div class="container py-5">
@@ -28,71 +30,156 @@
                     }
                     
                     <form method="post" id="bookingForm">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Booking.CustomerName" class="form-label">
-                                    <i class="fas fa-user me-1"></i>Full Name *
-                                </label>
-                                <input asp-for="Booking.CustomerName" class="form-control" 
-                                       placeholder="Enter your full name" />
-                                <span asp-validation-for="Booking.CustomerName" class="text-danger small"></span>
+                        <!-- Hidden fields for validation -->
+                        <input type="hidden" asp-for="Booking.HotelName" id="hotelNameHidden" />
+                        <input type="hidden" asp-for="Booking.TotalPrice" id="totalPriceHidden" />
+                        
+                        <!-- Customer Information -->
+                        <div class="mb-4">
+                            <h5 class="text-primary">
+                                <i class="fas fa-user-circle me-2"></i>Guest Information
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-user me-1"></i>Full Name *
+                                    </label>
+                                    <input asp-for="Booking.CustomerName" class="form-control" 
+                                           placeholder="Enter your full name" value="ngwako" />
+                                    <span asp-validation-for="Booking.CustomerName" class="text-danger small"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-envelope me-1"></i>Email Address *
+                                    </label>
+                                    <input asp-for="Booking.UserEmail" class="form-control" 
+                                           placeholder="you@example.com" value="ngwako@gmail.com" />
+                                    <span asp-validation-for="Booking.UserEmail" class="text-danger small"></span>
+                                </div>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Booking.CustomerEmail" class="form-label">
-                                    <i class="fas fa-envelope me-1"></i>Email Address *
-                                </label>
-                                <input asp-for="Booking.CustomerEmail" class="form-control" 
-                                       placeholder="you@example.com" />
-                                <span asp-validation-for="Booking.CustomerEmail" class="text-danger small"></span>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-phone me-1"></i>Phone Number
+                                    </label>
+                                    <input asp-for="Booking.CustomerPhone" class="form-control" 
+                                           placeholder="+1 (123) 456-7890" value="0607922149" />
+                                    <span asp-validation-for="Booking.CustomerPhone" class="text-danger small"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-envelope me-1"></i>Alternate Email
+                                    </label>
+                                    <input asp-for="Booking.CustomerEmail" class="form-control" 
+                                           placeholder="alternate@example.com" value="ngwako@gmail.com" />
+                                    <span asp-validation-for="Booking.CustomerEmail" class="text-danger small"></span>
+                                </div>
                             </div>
                         </div>
                         
-                        <div class="mb-3">
-                            <label asp-for="Booking.HotelId" class="form-label">
-                                <i class="fas fa-hotel me-1"></i>Select Hotel *
-                            </label>
-                            <select asp-for="Booking.HotelId" class="form-select" id="hotelSelect">
-                                <option value="">-- Select a Hotel --</option>
-                                @foreach (var hotel in Model.Hotels)
-                                {
-                                    <option value="@hotel.Id" data-price="@hotel.PricePerNight">
-                                        @hotel.Name - $@hotel.PricePerNight.ToString("F2")/night
-                                    </option>
-                                }
-                            </select>
-                            <span asp-validation-for="Booking.HotelId" class="text-danger small"></span>
+                        <!-- Hotel Selection -->
+                        <div class="mb-4">
+                            <h5 class="text-primary">
+                                <i class="fas fa-hotel me-2"></i>Hotel Details
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-building me-1"></i>Select Hotel *
+                                    </label>
+                                    <select asp-for="Booking.HotelId" class="form-control" id="hotelSelect">
+                                        <option value="">-- Select a Hotel --</option>
+                                        @if (Model.Hotels != null)
+                                        {
+                                            @foreach (var hotel in Model.Hotels)
+                                            {
+                                                <option value="@hotel.Id" 
+                                                        data-price="@hotel.PricePerNight.ToString(System.Globalization.CultureInfo.InvariantCulture)" 
+                                                        data-name="@hotel.Name">
+                                                    @hotel.Name - $@hotel.PricePerNight.ToString("F2")/night
+                                                </option>
+                                            }
+                                        }
+                                    </select>
+                                    <span asp-validation-for="Booking.HotelId" class="text-danger small"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-signature me-1"></i>Hotel Name (Auto-filled) *
+                                    </label>
+                                    <input type="text" class="form-control" 
+                                           id="hotelNameDisplay" readonly value="PALAZZO DI BORGO" />
+                                    <small class="text-muted">Auto-filled based on selection</small>
+                                </div>
+                            </div>
                         </div>
                         
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Booking.CheckInDate" class="form-label">
-                                    <i class="fas fa-sign-in-alt me-1"></i>Check-in Date *
-                                </label>
-                                <input asp-for="Booking.CheckInDate" class="form-control" 
-                                       type="date" id="checkInDate" />
-                                <span asp-validation-for="Booking.CheckInDate" class="text-danger small"></span>
+                        <!-- Dates and Guests -->
+                        <div class="mb-4">
+                            <h5 class="text-primary">
+                                <i class="fas fa-calendar-alt me-2"></i>Stay Details
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-sign-in-alt me-1"></i>Check-in Date *
+                                    </label>
+                                    <input asp-for="Booking.CheckInDate" class="form-control" 
+                                           type="date" id="checkInDate" value="2026-01-15" />
+                                    <span asp-validation-for="Booking.CheckInDate" class="text-danger small"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-sign-out-alt me-1"></i>Check-out Date *
+                                    </label>
+                                    <input asp-for="Booking.CheckOutDate" class="form-control" 
+                                           type="date" id="checkOutDate" value="2026-01-16" />
+                                    <span asp-validation-for="Booking.CheckOutDate" class="text-danger small"></span>
+                                </div>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Booking.CheckOutDate" class="form-label">
-                                    <i class="fas fa-sign-out-alt me-1"></i>Check-out Date *
-                                </label>
-                                <input asp-for="Booking.CheckOutDate" class="form-control" 
-                                       type="date" id="checkOutDate" />
-                                <span asp-validation-for="Booking.CheckOutDate" class="text-danger small"></span>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-users me-1"></i>Number of Guests *
+                                    </label>
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-outline-secondary" id="decreaseGuests">-</button>
+                                        <input asp-for="Booking.NumberOfGuests" class="form-control text-center" 
+                                               min="1" max="10" value="1" id="guestsInput" />
+                                        <button type="button" class="btn btn-outline-secondary" id="increaseGuests">+</button>
+                                    </div>
+                                    <span asp-validation-for="Booking.NumberOfGuests" class="text-danger small"></span>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-dollar-sign me-1"></i>Total Price (Auto-calculated) *
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="text" class="form-control" 
+                                               id="totalPriceDisplay" readonly value="299.99" />
+                                    </div>
+                                    <small class="text-muted">Calculated automatically</small>
+                                </div>
                             </div>
                         </div>
                         
-                        <div class="mb-3">
-                            <label asp-for="Booking.NumberOfGuests" class="form-label">
-                                <i class="fas fa-users me-1"></i>Number of Guests *
-                            </label>
-                            <div class="input-group">
-                                <button type="button" class="btn btn-outline-secondary" id="decreaseGuests">-</button>
-                                <input asp-for="Booking.NumberOfGuests" class="form-control text-center" 
-                                       min="1" max="10" value="1" id="guestsInput" />
-                                <button type="button" class="btn btn-outline-secondary" id="increaseGuests">+</button>
+                        <!-- Special Requests -->
+                        <div class="mb-4">
+                            <h5 class="text-primary">
+                                <i class="fas fa-comment-alt me-2"></i>Special Requests
+                            </h5>
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-edit me-1"></i>Additional Notes
+                                </label>
+                                <textarea asp-for="Booking.SpecialRequests" class="form-control" 
+                                          rows="3" placeholder="Any special requests or notes..."></textarea>
+                                <span asp-validation-for="Booking.SpecialRequests" class="text-danger small"></span>
                             </div>
-                            <span asp-validation-for="Booking.NumberOfGuests" class="text-danger small"></span>
                         </div>
                         
                         <!-- Price Summary -->
@@ -103,6 +190,7 @@
                                 </h5>
                                 <div class="row">
                                     <div class="col-6">
+                                        <p class="mb-1">Hotel:</p>
                                         <p class="mb-1">Nightly Rate:</p>
                                         <p class="mb-1">Number of Nights:</p>
                                         <p class="mb-1">Number of Guests:</p>
@@ -110,11 +198,12 @@
                                         <h5 class="mb-0 fw-bold">Total Amount:</h5>
                                     </div>
                                     <div class="col-6 text-end">
-                                        <p class="mb-1" id="nightlyRate">$0.00</p>
-                                        <p class="mb-1" id="nightsCount">0</p>
-                                        <p class="mb-1" id="guestsCount">1</p>
+                                        <p class="mb-1" id="summaryHotelName">PALAZZO DI BORGO</p>
+                                        <p class="mb-1" id="summaryNightlyRate">$299.99</p>
+                                        <p class="mb-1" id="summaryNightsCount">1</p>
+                                        <p class="mb-1" id="summaryGuestsCount">1</p>
                                         <hr class="my-2">
-                                        <h5 class="mb-0 fw-bold text-primary" id="totalAmount">$0.00</h5>
+                                        <h5 class="mb-0 fw-bold text-primary" id="summaryTotalAmount">$299.99</h5>
                                     </div>
                                 </div>
                             </div>
@@ -136,6 +225,7 @@
 </div>
 
 @section Styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .form-control:focus, .form-select:focus {
             border-color: #667eea;
@@ -165,45 +255,110 @@
         #submitBtn:active {
             transform: translateY(0);
         }
+        
+        input[readonly] {
+            background-color: #f8f9fa;
+            cursor: not-allowed;
+        }
     </style>
 }
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Set minimum dates
-            const today = new Date().toISOString().split('T')[0];
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            const tomorrowStr = tomorrow.toISOString().split('T')[0];
+            // Force decimal parsing with dot (.) separator
+            function parseDecimal(value) {
+                // Replace comma with dot for decimal parsing
+                if (typeof value === 'string') {
+                    value = value.replace(',', '.');
+                }
+                return parseFloat(value) || 0;
+            }
             
-            const checkInInput = document.getElementById('checkInDate');
-            const checkOutInput = document.getElementById('checkOutDate');
+            function formatDecimal(value) {
+                // Format with dot for submission
+                return value.toFixed(2).replace(',', '.');
+            }
             
-            if (checkInInput) {
-                checkInInput.min = today;
-                checkInInput.value = today;
-                
-                checkInInput.addEventListener('change', function() {
-                    const selectedDate = new Date(this.value);
-                    const nextDay = new Date(selectedDate);
-                    nextDay.setDate(nextDay.getDate() + 1);
-                    checkOutInput.min = nextDay.toISOString().split('T')[0];
-                    
-                    if (new Date(checkOutInput.value) < nextDay) {
-                        checkOutInput.value = nextDay.toISOString().split('T')[0];
+            // Set up the form with default values
+            const hotelSelect = document.getElementById('hotelSelect');
+            const hotelNameHidden = document.getElementById('hotelNameHidden');
+            const totalPriceHidden = document.getElementById('totalPriceHidden');
+            const hotelNameDisplay = document.getElementById('hotelNameDisplay');
+            const totalPriceDisplay = document.getElementById('totalPriceDisplay');
+            
+            // Pre-select the hotel from your screenshot
+            if (hotelSelect) {
+                // Find and select PALAZZO DI BORGO
+                for (let i = 0; i < hotelSelect.options.length; i++) {
+                    if (hotelSelect.options[i].textContent.includes('PALAZZO DI BORGO')) {
+                        hotelSelect.selectedIndex = i;
+                        break;
                     }
+                }
+                
+                // Set initial values
+                const selectedOption = hotelSelect.options[hotelSelect.selectedIndex];
+                if (selectedOption && selectedOption.value) {
+                    const hotelName = selectedOption.getAttribute('data-name') || 'PALAZZO DI BORGO';
+                    const pricePerNight = parseDecimal(selectedOption.getAttribute('data-price') || '299.99');
                     
-                    calculateTotal();
+                    // Set the hidden fields for form submission
+                    if (hotelNameHidden) hotelNameHidden.value = hotelName;
+                    if (hotelNameDisplay) hotelNameDisplay.value = hotelName;
+                    
+                    // Calculate total price (1 night * 1 guest)
+                    const totalPrice = pricePerNight * 1 * 1;
+                    if (totalPriceHidden) totalPriceHidden.value = formatDecimal(totalPrice);
+                    if (totalPriceDisplay) totalPriceDisplay.value = formatDecimal(totalPrice);
+                }
+            }
+            
+            // Hotel selection change handler
+            if (hotelSelect) {
+                hotelSelect.addEventListener('change', function() {
+                    const selectedOption = this.options[this.selectedIndex];
+                    if (selectedOption && selectedOption.value) {
+                        const hotelName = selectedOption.getAttribute('data-name');
+                        const pricePerNight = parseDecimal(selectedOption.getAttribute('data-price'));
+                        
+                        // Set the hidden fields
+                        if (hotelNameHidden) hotelNameHidden.value = hotelName;
+                        if (hotelNameDisplay) hotelNameDisplay.value = hotelName;
+                        
+                        // Calculate total price
+                        const guests = parseInt(document.getElementById('guestsInput')?.value) || 1;
+                        const checkIn = new Date(document.getElementById('checkInDate')?.value);
+                        const checkOut = new Date(document.getElementById('checkOutDate')?.value);
+                        const nights = Math.max(0, Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24))) || 1;
+                        
+                        const totalPrice = pricePerNight * nights * guests;
+                        if (totalPriceHidden) totalPriceHidden.value = formatDecimal(totalPrice);
+                        if (totalPriceDisplay) totalPriceDisplay.value = formatDecimal(totalPrice);
+                        
+                        // Update summary
+                        updateSummary(hotelName, pricePerNight, nights, guests, totalPrice);
+                    }
                 });
             }
             
-            if (checkOutInput) {
-                checkOutInput.min = tomorrowStr;
-                checkOutInput.value = tomorrowStr;
-                checkOutInput.addEventListener('change', calculateTotal);
+            // Update summary function
+            function updateSummary(hotelName, pricePerNight, nights, guests, totalPrice) {
+                const summaryHotelName = document.getElementById('summaryHotelName');
+                const summaryNightlyRate = document.getElementById('summaryNightlyRate');
+                const summaryNightsCount = document.getElementById('summaryNightsCount');
+                const summaryGuestsCount = document.getElementById('summaryGuestsCount');
+                const summaryTotalAmount = document.getElementById('summaryTotalAmount');
+                
+                if (summaryHotelName) summaryHotelName.textContent = hotelName;
+                if (summaryNightlyRate) summaryNightlyRate.textContent = `$${formatDecimal(pricePerNight)}`;
+                if (summaryNightsCount) summaryNightsCount.textContent = nights;
+                if (summaryGuestsCount) summaryGuestsCount.textContent = guests;
+                if (summaryTotalAmount) summaryTotalAmount.textContent = `$${formatDecimal(totalPrice)}`;
             }
             
             // Guests counter
@@ -211,87 +366,136 @@
             const decreaseBtn = document.getElementById('decreaseGuests');
             const increaseBtn = document.getElementById('increaseGuests');
             
-            decreaseBtn.addEventListener('click', function() {
-                let value = parseInt(guestsInput.value);
-                if (value > 1) {
-                    guestsInput.value = value - 1;
-                    calculateTotal();
-                }
-            });
+            if (decreaseBtn && guestsInput) {
+                decreaseBtn.addEventListener('click', function() {
+                    let value = parseInt(guestsInput.value);
+                    if (value > 1) {
+                        guestsInput.value = value - 1;
+                        recalculateTotal();
+                    }
+                });
+            }
             
-            increaseBtn.addEventListener('click', function() {
-                let value = parseInt(guestsInput.value);
-                if (value < 10) {
-                    guestsInput.value = value + 1;
-                    calculateTotal();
-                }
-            });
+            if (increaseBtn && guestsInput) {
+                increaseBtn.addEventListener('click', function() {
+                    let value = parseInt(guestsInput.value);
+                    if (value < 10) {
+                        guestsInput.value = value + 1;
+                        recalculateTotal();
+                    }
+                });
+            }
             
-            guestsInput.addEventListener('change', function() {
-                let value = parseInt(this.value);
-                if (value < 1) this.value = 1;
-                if (value > 10) this.value = 10;
-                calculateTotal();
-            });
+            if (guestsInput) {
+                guestsInput.addEventListener('change', function() {
+                    let value = parseInt(this.value);
+                    if (value < 1) this.value = 1;
+                    if (value > 10) this.value = 10;
+                    recalculateTotal();
+                });
+            }
             
-            // Hotel selection
-            const hotelSelect = document.getElementById('hotelSelect');
-            hotelSelect.addEventListener('change', calculateTotal);
+            // Date change handlers
+            const checkInInput = document.getElementById('checkInDate');
+            const checkOutInput = document.getElementById('checkOutDate');
             
-            // Calculate total amount
-            function calculateTotal() {
+            if (checkInInput) {
+                checkInInput.addEventListener('change', function() {
+                    const selectedDate = new Date(this.value);
+                    const nextDay = new Date(selectedDate);
+                    nextDay.setDate(nextDay.getDate() + 1);
+                    
+                    if (checkOutInput) {
+                        checkOutInput.min = nextDay.toISOString().split('T')[0];
+                        if (new Date(checkOutInput.value) < nextDay) {
+                            checkOutInput.value = nextDay.toISOString().split('T')[0];
+                        }
+                    }
+                    
+                    recalculateTotal();
+                });
+            }
+            
+            if (checkOutInput) {
+                checkOutInput.addEventListener('change', recalculateTotal);
+            }
+            
+            // Recalculate total function
+            function recalculateTotal() {
                 const hotelSelect = document.getElementById('hotelSelect');
-                const selectedOption = hotelSelect.options[hotelSelect.selectedIndex];
-                const pricePerNight = selectedOption ? parseFloat(selectedOption.getAttribute('data-price')) : 0;
+                const selectedOption = hotelSelect?.options[hotelSelect.selectedIndex];
                 
-                const checkIn = new Date(document.getElementById('checkInDate').value);
-                const checkOut = new Date(document.getElementById('checkOutDate').value);
-                const nights = Math.max(0, Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24)));
+                if (!selectedOption || !selectedOption.value) return;
                 
-                const guests = parseInt(document.getElementById('guestsInput').value) || 1;
+                const pricePerNight = parseDecimal(selectedOption.getAttribute('data-price') || '0');
+                const hotelName = selectedOption.getAttribute('data-name') || '';
+                const guests = parseInt(document.getElementById('guestsInput')?.value) || 1;
                 
-                // Update display
-                document.getElementById('nightlyRate').textContent = `$${pricePerNight.toFixed(2)}`;
-                document.getElementById('nightsCount').textContent = nights;
-                document.getElementById('guestsCount').textContent = guests;
+                const checkIn = document.getElementById('checkInDate')?.value;
+                const checkOut = document.getElementById('checkOutDate')?.value;
                 
-                // Calculate total (price * nights * guests)
-                const total = pricePerNight * nights * guests;
-                document.getElementById('totalAmount').textContent = `$${total.toFixed(2)}`;
+                if (!checkIn || !checkOut) return;
+                
+                const nights = Math.max(1, Math.ceil((new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24)));
+                const totalPrice = pricePerNight * nights * guests;
+                
+                // Update hidden fields with proper decimal format
+                if (hotelNameHidden) hotelNameHidden.value = hotelName;
+                if (totalPriceHidden) totalPriceHidden.value = formatDecimal(totalPrice);
+                
+                // Update display fields
+                if (hotelNameDisplay) hotelNameDisplay.value = hotelName;
+                if (totalPriceDisplay) totalPriceDisplay.value = formatDecimal(totalPrice);
+                
+                // Update summary
+                updateSummary(hotelName, pricePerNight, nights, guests, totalPrice);
+            }
+            
+            // Form submission - update hidden fields one last time
+            const bookingForm = document.getElementById('bookingForm');
+            if (bookingForm) {
+                bookingForm.addEventListener('submit', function(e) {
+                    // Make sure hidden fields are updated
+                    recalculateTotal();
+                    
+                    // Validate
+                    const hotelSelect = document.getElementById('hotelSelect');
+                    if (!hotelSelect || !hotelSelect.value) {
+                        e.preventDefault();
+                        alert('Please select a hotel.');
+                        return;
+                    }
+                    
+                    const checkIn = document.getElementById('checkInDate')?.value;
+                    const checkOut = document.getElementById('checkOutDate')?.value;
+                    if (checkIn && checkOut && new Date(checkOut) <= new Date(checkIn)) {
+                        e.preventDefault();
+                        alert('Check-out date must be after check-in date.');
+                        return;
+                    }
+                    
+                    // Force the total price to use dot decimal separator
+                    const totalPriceInput = document.getElementById('totalPriceHidden');
+                    if (totalPriceInput) {
+                        let value = totalPriceInput.value;
+                        // Replace comma with dot if present
+                        if (value.includes(',')) {
+                            value = value.replace(',', '.');
+                            totalPriceInput.value = value;
+                        }
+                    }
+                    
+                    // Show loading
+                    const submitBtn = document.getElementById('submitBtn');
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+                    }
+                });
             }
             
             // Initial calculation
-            calculateTotal();
-            
-            // Form submission handling
-            const bookingForm = document.getElementById('bookingForm');
-            const submitBtn = document.getElementById('submitBtn');
-            
-            bookingForm.addEventListener('submit', function(e) {
-                // Validate dates
-                const checkIn = new Date(document.getElementById('checkInDate').value);
-                const checkOut = new Date(document.getElementById('checkOutDate').value);
-                
-                if (checkOut <= checkIn) {
-                    e.preventDefault();
-                    alert('Check-out date must be after check-in date.');
-                    return;
-                }
-                
-                // Show loading state
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
-                
-                // The form will submit normally here
-                // If there are validation errors, they'll show up in the alert box
-            });
-            
-            // Prevent form submission on Enter in input fields
-            bookingForm.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter' && e.target.tagName !== 'BUTTON' && e.target.type !== 'submit') {
-                    e.preventDefault();
-                }
-            });
+            recalculateTotal();
         });
     </script>
 }

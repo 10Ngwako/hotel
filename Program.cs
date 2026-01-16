@@ -65,6 +65,116 @@ using (var scope = app.Services.CreateScope())
             Email = "info@palazzodiborgo.com",
             Address = "Via Montenapoleone 1, 20121 Milan, Italy"
         });
+         
+        dbContext.Hotels.Add(new Hotel 
+        { 
+            Name = "RAMAKGOAKGOA AND AMIGOS HOTEL", 
+            Location = "PRETORIA, HARTFIELD, South Africa", 
+            Description = "Luxury hotel in the heart of PRETORIA",
+            PricePerNight = 299.99m,
+            Rating = 4.8m,
+            TotalRooms = 50,
+            ImageUrl = "images/image (5).jpg",
+            Amenities = "Free WiFi, Swimming Pool, Spa, Restaurant, Parking",
+            Phone = "+39 02 1234567",
+            Email = "info@palazzodiborgo.com",
+            Address = "Via Montenapoleone 1, 20121 Milan, Italy"
+        });
+        
+        dbContext.Hotels.Add(new Hotel 
+        { 
+            Name = "RAMAKGOAKGOA AND SONS RESORT", 
+            Location = "LIMPOPO, SOUTH AFRICA", 
+            Description = "Luxury hotel in the heart of Limpopo",
+            PricePerNight = 299.99m,
+            Rating = 4.8m,
+            TotalRooms = 50,
+            ImageUrl = "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+            Amenities = "Free WiFi, Swimming Pool, Spa, Restaurant, Parking",
+            Phone = "+39 02 1234567",
+            Email = "info@palazzodiborgo.com",
+            Address = "Via Montenapoleone 1, 20121 Milan, Italy"
+        });
+
+        dbContext.Hotels.Add(new Hotel 
+        { 
+            Name = "NGWAKZEN RESORT", 
+            Location = "Mpumalanga, South Africa", 
+            Description = "Luxury hotel in the heart of Mpumalanga",
+            PricePerNight = 299.99m,
+            Rating = 4.8m,
+            TotalRooms = 50,
+            ImageUrl = "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+            Amenities = "Free WiFi, Swimming Pool, Spa, Restaurant, Parking",
+            Phone = "+39 02 1234567",
+            Email = "info@palazzodiborgo.com",
+            Address = "Via Montenapoleone 1, 20121 Milan, Italy"
+        });
+
+        dbContext.Hotels.Add(new Hotel 
+        { 
+            Name = "Palacio de las Palmas", 
+            Location = "Milan, Italy", 
+            Description = "Luxury hotel in the heart of Drankensburg",
+            PricePerNight = 299.99m,
+            Rating = 4.8m,
+            TotalRooms = 50,
+            ImageUrl = "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+            Amenities = "Free WiFi, Swimming Pool, Spa, Restaurant, Parking",
+            Phone = "+39 02 1234567",
+            Email = "info@palazzodiborgo.com",
+            Address = "Via Montenapoleone 1, 20121 Milan, Italy"
+        });
+
+        dbContext.Hotels.Add(new Hotel 
+        { 
+            Name = "Casa padre Hotel", 
+            Location = "Milan, Italy", 
+            Description = "Luxury hotel in the heart of Drankensburg",
+            PricePerNight = 299.99m,
+            Rating = 4.8m,
+            TotalRooms = 50,
+            ImageUrl = "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+            Amenities = "Free WiFi, Swimming Pool, Spa, Restaurant, Parking",
+            Phone = "+39 02 1234567",
+            Email = "info@palazzodiborgo.com",
+            Address = "Via Montenapoleone 1, 20121 Milan, Italy"
+        });
+
+        dbContext.Hotels.Add(new Hotel 
+        { 
+            Name = "Hayani Resort", 
+            Location = "Milan, Italy", 
+            Description = "Luxury hotel in the heart of Drankensburg",
+            PricePerNight = 299.99m,
+            Rating = 4.8m,
+            TotalRooms = 50,
+            ImageUrl = "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+            Amenities = "Free WiFi, Swimming Pool, Spa, Restaurant, Parking",
+            Phone = "+39 02 1234567",
+            Email = "info@palazzodiborgo.com",
+            Address = "Via Montenapoleone 1, 20121 Milan, Italy"
+        });
+
+        dbContext.Hotels.Add(new Hotel 
+        { 
+            Name = "Palacio de las Palmas", 
+            Location = "Milan, Italy", 
+            Description = "Luxury hotel in the heart of Drankensburg",
+            PricePerNight = 299.99m,
+            Rating = 4.8m,
+            TotalRooms = 50,
+            ImageUrl = "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+            Amenities = "Free WiFi, Swimming Pool, Spa, Restaurant, Parking",
+            Phone = "+39 02 1234567",
+            Email = "info@palazzodiborgo.com",
+            Address = "Via Montenapoleone 1, 20121 Milan, Italy"
+        });
+
+
+
+
+    
         
         dbContext.Hotels.Add(new Hotel 
         { 
