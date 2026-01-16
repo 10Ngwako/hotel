@@ -1,6 +1,5 @@
 C:\Users\PC\hotel\SimpleHotelBooking\bin\Debug\net9.0\SimpleHotelBooking.exe
 C:\Users\PC\hotel\SimpleHotelBooking\bin\Debug\net9.0\SimpleHotelBooking.dll
-C:\Users\PC\hotel\SimpleHotelBooking\bin\Debug\net9.0\SimpleHotelBooking.pdb
 C:\Users\PC\hotel\SimpleHotelBooking\bin\Debug\net9.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
 C:\Users\PC\hotel\SimpleHotelBooking\bin\Debug\net9.0\Microsoft.AspNetCore.Identity.UI.dll
 C:\Users\PC\hotel\SimpleHotelBooking\bin\Debug\net9.0\Microsoft.Data.Sqlite.dll
@@ -273,5 +272,6 @@ C:\Users\PC\hotel\SimpleHotelBooking\obj\Debug\net9.0\refint\SimpleHotelBooking.
 C:\Users\PC\hotel\SimpleHotelBooking\obj\Debug\net9.0\SimpleHotelBooking.pdb
 C:\Users\PC\hotel\SimpleHotelBooking\bin\Debug\net9.0\SimpleHotelBooking.deps.json
 C:\Users\PC\hotel\SimpleHotelBooking\bin\Debug\net9.0\SimpleHotelBooking.runtimeconfig.json
+C:\Users\PC\hotel\SimpleHotelBooking\bin\Debug\net9.0\SimpleHotelBooking.pdb
 C:\Users\PC\hotel\SimpleHotelBooking\obj\Debug\net9.0\SimpleHotelBooking.genruntimeconfig.cache
 C:\Users\PC\hotel\SimpleHotelBooking\obj\Debug\net9.0\ref\SimpleHotelBooking.dll
