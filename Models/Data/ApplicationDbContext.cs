@@ -4,12 +4,15 @@ using SimpleHotelBooking.Models;
 
 namespace SimpleHotelBooking.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext 
+        : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options) { }
+            : base(options)
+        {
+        }
 
-        public DbSet<Hotel> Hotels => Set<Hotel>();
-        public DbSet<Booking> Bookings => Set<Booking>();
+        public DbSet<Hotel> Hotels { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
     }
 }

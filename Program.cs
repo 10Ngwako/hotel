@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SimpleHotelBooking.Data;
 using SimpleHotelBooking.Models;
@@ -20,6 +21,23 @@ builder.Services.AddSession(options =>
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Add Identity
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = true;
+    options.Password.RequiredLength = 6;
+})
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Login";
+    options.AccessDeniedPath = "/AccessDenied";
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -32,6 +50,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
+app.UseAuthentication(); // ✅ Add this before authorization
 app.UseAuthorization();
 app.UseSession();
 
@@ -39,49 +59,32 @@ app.UseSession();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    
-    // Create database if it doesn''t exist
+
+    // Create database if it doesn't exist
     dbContext.Database.EnsureCreated();
-    
-    // Try to add seed data (will fail gracefully if already exists)
+
+    // Seed sample hotels
     try
     {
-        // Clear any existing data first
-        dbContext.Hotels.RemoveRange(dbContext.Hotels);
-        await dbContext.SaveChangesAsync();
-        
-        // Add sample hotels
-        dbContext.Hotels.Add(new Hotel 
-        { 
-            Name = "PALAZZO DI BORGO", 
-            Location = "Milan, Italy", 
-            Description = "Luxury hotel in the heart of Milan",
-            PricePerNight = 299.99m,
-            Rating = 4.8m,
-            TotalRooms = 50,
-            ImageUrl = "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-            Amenities = "Free WiFi, Swimming Pool, Spa, Restaurant, Parking",
-            Phone = "+39 02 1234567",
-            Email = "info@palazzodiborgo.com",
-            Address = "Via Montenapoleone 1, 20121 Milan, Italy"
-        });
-         
-        dbContext.Hotels.Add(new Hotel 
-        { 
-            Name = "RAMAKGOAKGOA AND AMIGOS HOTEL", 
-            Location = "PRETORIA, HARTFIELD, South Africa", 
-            Description = "Luxury hotel in the heart of PRETORIA",
-            PricePerNight = 299.99m,
-            Rating = 4.8m,
-            TotalRooms = 50,
-            ImageUrl = "images/image (5).jpg",
-            Amenities = "Free WiFi, Swimming Pool, Spa, Restaurant, Parking",
-            Phone = "+39 02 1234567",
-            Email = "info@palazzodiborgo.com",
-            Address = "Via Montenapoleone 1, 20121 Milan, Italy"
-        });
-        
-        dbContext.Hotels.Add(new Hotel 
+        if (!dbContext.Hotels.Any())
+        {
+            dbContext.Hotels.Add(new Hotel { 
+                Name = "PALAZZO DI BORGO", 
+                Location = "Milan, Italy", 
+                Description = "Luxury hotel in the heart of Milan",
+                PricePerNight = 299.99m,
+                Rating = 4.8m,
+                TotalRooms = 50,
+                ImageUrl = "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+                Amenities = "Free WiFi, Swimming Pool, Spa, Restaurant, Parking",
+                Phone = "+39 02 1234567",
+                Email = "info@palazzodiborgo.com",
+                Address = "Via Montenapoleone 1, 20121 Milan, Italy"
+            });
+
+
+            
+dbContext.Hotels.Add(new Hotel 
         { 
             Name = "RAMAKGOAKGOA AND SONS RESORT", 
             Location = "LIMPOPO, SOUTH AFRICA", 
@@ -191,13 +194,17 @@ using (var scope = app.Services.CreateScope())
             Address = "Piazza della Loggia 12, 25121 Brescia, Italy"
         });
         
-        await dbContext.SaveChangesAsync();
-        Console.WriteLine("? Database seeded successfully");
+
+
+
+
+            // Add other hotels similarly...
+            await dbContext.SaveChangesAsync();
+        }
     }
     catch (Exception ex)
     {
         Console.WriteLine($"Note: {ex.Message}");
-        // Continue - database is created even if seeding fails
     }
 }
 
