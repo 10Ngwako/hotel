@@ -1,63 +1,130 @@
-# Hotel Booking System – Requirements
+# Hotel Booking System – Requirements Specification
 
 ## 1. Overview
 
-The Hotel Booking System is a web-based application developed using C# and .NET 9.0.  
-It allows customers to search for hotels and rooms, make reservations, and manage bookings, while enabling administrators to manage hotels, rooms, pricing, and availability.
+The Hotel Booking System is a web-based application designed to allow customers to search for hotel rooms, make reservations, and manage their bookings. Hotel staff and administrators can manage rooms, availability, and reservations through a secure interface.
 
-## 2. Objectives
+The system is developed using **C#**, **ASP.NET Core Razor Pages**, and **.NET 9.0.0**, with **Visual Studio Code** as the development environment.
 
-- Provide an easy-to-use platform for hotel room bookings
-- Ensure accurate availability and pricing management
-- Support secure user authentication and data handling
-- Enable administrators to manage hotel-related data efficiently
+---
 
-## 3. Stakeholders
+## 2. System Objectives
 
-- Customers (guests)
-- Hotel administrators
-- System administrators
-- Developers and maintainers
+- Provide an easy-to-use platform for hotel room reservations
+- Allow administrators to manage rooms, pricing, and availability
+- Ensure accurate booking records and prevent double bookings
+- Maintain secure user authentication and authorization
+- Support maintainable and scalable application architecture
 
-## 4. Functional Requirements
+---
 
-### 4.1 User Management
-- Users shall be able to register and log in
-- Users shall be able to view and update their profile
+## 3. Functional Requirements
+
+### 3.1 User Management
+
+- Users shall be able to register an account
+- Users shall be able to log in and log out
+- Users shall be able to view and manage their profile
 - The system shall support role-based access (Customer, Admin)
 
-### 4.2 Hotel & Room Management
-- Admins shall be able to create, update, and delete hotels
-- Admins shall be able to manage room types, prices, and availability
-- The system shall prevent double-booking of rooms
+### 3.2 Room Management (Admin)
 
-### 4.3 Booking Management
-- Users shall be able to search for available rooms by date and location
-- Users shall be able to create a booking
-- Users shall be able to view and cancel their bookings
-- The system shall calculate total booking cost automatically
+- Admin users shall be able to add new rooms
+- Admin users shall be able to edit room details (type, price, capacity)
+- Admin users shall be able to delete rooms
+- Admin users shall be able to mark rooms as available or unavailable
+
+### 3.3 Room Search and Availability
+
+- Users shall be able to search for available rooms by date range
+- Users shall be able to view room details and pricing
+- The system shall prevent bookings for unavailable rooms
+- The system shall display availability in real time
+
+### 3.4 Booking Management
+
+- Users shall be able to create a booking for an available room
+- Users shall be able to view their booking history
+- Users shall be able to cancel a booking (subject to policy)
+- The system shall store booking dates, room details, and user information
 
 
-## 5. Non-Functional Requirements
+---
 
-### 5.1 Performance
-- The system should support concurrent users without performance degradation
-- Search results should be returned within an acceptable response time
+## 4. Non-Functional Requirements
 
-### 5.2 Security
-- User passwords shall be securely hashed
-- Authentication shall be handled using industry-standard mechanisms
-- Sensitive data shall be protected against unauthorized access
+### 4.1 Performance
 
-### 5.3 Reliability & Availability
-- The system should be available 24/7
-- The system should handle failures gracefully
+- The system shall respond to user actions within 2 seconds under normal load
+- The system shall support multiple concurrent users
 
-### 5.4 Maintainability
-- Code should be modular and testable
+### 4.2 Security
 
-## 6. Assumptions & Constraints
+- The system shall enforce authentication and authorization
+- Passwords shall be securely hashed
+- The system shall protect against common web vulnerabilities (e.g., SQL injection, CSRF)
 
-- The application is built using C# and .NET 9.0
-- A relational database is used for data storage
-- The system is deployed in a web environment
+### 4.3 Usability
+
+- The user interface shall be intuitive and user-friendly
+- The application shall be accessible through modern web browsers
+
+### 4.4 Reliability
+
+- The system shall ensure data consistency and integrity
+- The system shall handle invalid input gracefully
+
+### 4.5 Maintainability
+
+- The codebase shall follow clean architecture and naming conventions
+- The system shall be modular and easy to extend
+
+---
+
+## 5. Technical Requirements
+
+### 5.1 Development Stack
+
+- Programming Language: **C#**
+- Framework: **ASP.NET Core Razor Pages**
+- Runtime: **.NET 9.0.0**
+- IDE: **Visual Studio Code**
+- Version Control: **Git**
+
+### 5.2 Architecture
+
+- Razor Pages (PageModel pattern)
+- MVC-style separation of concerns
+- Dependency Injection for services
+- Entity Framework Core 
+
+### 5.3 Database 
+
+- Relational database ( SQL Server, SQLite)
+- Tables for Users, Rooms, Bookings
+- Proper foreign key relationships
+
+---
+
+## 6. Assumptions and Constraints
+
+- Users have internet access and a modern browser
+- Initial release supports a single hotel location
+
+
+---
+
+## 7. Future Enhancements
+
+- Multi-hotel support
+- Email notifications and booking confirmations
+- Advanced reporting and analytics
+- Mobile-friendly responsive design
+
+---
+
+## 8. Glossary
+
+- **Razor Pages**: ASP.NET Core feature for page-focused web applications
+- **Booking**: A reservation made by a user for a hotel room
+- **Admin**: User with privileges to manage system data
